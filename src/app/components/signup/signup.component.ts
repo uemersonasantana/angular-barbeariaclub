@@ -1,46 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { JarwisService } from '../../services/jarwis.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class LoginComponent implements OnInit {
+export class SignupComponent implements OnInit {
 
   public form = {
     email: null,
-    password: null
+    name: null,
+    password: null,
+    password_confirmation: null
   };
-
-  public error = null;
+  public error:any = [];
 
   constructor(
     private Jarwis: JarwisService,
     private Token: TokenService,
-    private router: Router,
-    private Auth: AuthService
+    private router: Router
   ) { }
 
   onSubmit() {
-    this.Jarwis.login(this.form).subscribe(
+    this.Jarwis.signup(this.form).subscribe(
       data => this.handleResponse(data),
       error => this.handleError(error)
     );
   }
-
   handleResponse(data) {
     this.Token.handle(data.access_token);
-    this.Auth.changeAuthStatus(true);
     this.router.navigateByUrl('/agendamentos');
   }
 
   handleError(error) {
-    this.error = error.error.error;
+    this.error = error.error.errors;
   }
 
   ngOnInit(): void {

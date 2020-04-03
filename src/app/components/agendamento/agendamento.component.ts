@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { NovoAgendamentoComponent } from '../novo-agendamento/novo-agendamento.component';
 import { Agendamento, AgendamentoService } from '../../services/agendamento.service';
 import 'rxjs/Rx';
@@ -38,8 +37,7 @@ export class AgendamentoComponent  {
   dataSource = ELEMENT_DATA;
 
   constructor(
-    private AgendamentoService: AgendamentoService,
-    public dialog: MatDialog
+    private AgendamentoService: AgendamentoService
   ) {}
 
   ngOnInit() {
@@ -54,10 +52,10 @@ export class AgendamentoComponent  {
             error => this.errorMessage = <any>error
         );
   }
-  NovoAgendamento() {
+  /*NovoAgendamento() {
     const dialogRef = this.dialog.open(NovoAgendamentoComponent, 
     {
       width: '600px'
     });
-  }
+  }*/
 }

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {MatDialogRef} from '@angular/material/dialog';
 import {Barbeiro} from '../../modal/barbeiro';
 import {BarbeiroService} from '../../services/barbeiro.service';
 import {Agendamento,AgendamentoService} from '../../services/agendamento.service';
@@ -38,7 +37,7 @@ export class NovoAgendamentoComponent implements OnInit {
     private AgendamentoService: AgendamentoService,
     private BarbeiroService: BarbeiroService,
     private http: HttpClient,
-    public dialogref: MatDialogRef<NovoAgendamentoComponent>
+    //public dialogref: MatDialogRef<NovoAgendamentoComponent>
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +85,7 @@ export class NovoAgendamentoComponent implements OnInit {
         .addAgendamentos(this.agendamento)
         .subscribe(
             agendamentos => {
-              this.dialogref.close();
+              //this.dialogref.close();
             },
             error => {
               this.htmlOfErrors = '<ul>';
@@ -101,7 +100,7 @@ export class NovoAgendamentoComponent implements OnInit {
         );
   }
   cancelar() {
-    this.dialogref.close(null);
+    //this.dialogref.close(null);
   }
 
   selecionarCliente(id) {

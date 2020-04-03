@@ -1,28 +1,4 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <h1>BarbeariaClub</h1>
-    <span class="menu-spacer"></span>
-    <div>
-      <a mat-button>Agendamentos</a>
-      <a mat-button>Clientes</a>
-      <a mat-button>Barbeiros</a>
-      <a mat-button>Gráficos</a>
-    </div>
-    <span class="align-right"></span>
-    <div>
-      <button mat-button [matMenuTriggerFor]="menu">Minha Conta</button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>Perfil</button>
-        <button mat-menu-item>Sair</button>
-      </mat-menu>
-    </div>
-  </mat-toolbar-row>
-
-  <!--<mat-toolbar-row>
-      <span style="font-size: 12px;">SimpleCRM helps you easily manage your contacts</span>
-    </mat-toolbar-row>-->
-</mat-toolbar>
-
-<div fxLayout="column" fxLayoutAlign="stretch">
-  <app-agendamento></app-agendamento>
+<app-navbar></app-navbar>
+<div class="container">
+    <router-outlet></router-outlet>
 </div>

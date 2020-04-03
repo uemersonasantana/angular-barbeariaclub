@@ -1,93 +1,59 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {APP_BASE_HREF} from '@angular/common';
 
-import { AppComponent } from './app.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-
-
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatBadgeModule} from '@angular/material/badge';
-
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
-
+import { AppRoutingModule } from './/app-routing.module';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AgendamentoComponent } from './components/agendamento/agendamento.component';
-import { NovoAgendamentoComponent } from './components/novo-agendamento/novo-agendamento.component';
+import {AgendamentoService} from './services/agendamento.service';
+import {BarbeiroService} from './services/barbeiro.service';
 
-import { AgendamentoService } from './services/agendamento.service';
-import { BarbeiroService } from './services/barbeiro.service';
+import {AppComponent} from './app.component';
 
-import { TimePickerComponent } from './components/time-picker/time-picker.component';
-import {OverlayModule} from '@angular/cdk/overlay';
+import {AgendamentoComponent} from './components/agendamento/agendamento.component';
+import {NovoAgendamentoComponent} from './components/novo-agendamento/novo-agendamento.component';
+import {TimePickerComponent} from './components/time-picker/time-picker.component';
 
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
+import {LoginComponent} from './components/login/login.component';
+import {SignupComponent} from './components/signup/signup.component';
+import {RequestResetComponent} from './components/password/request-reset/request-reset.component';
+import {ResponseResetComponent} from './components/password/response-reset/response-reset.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
 
-/*const routes: Routes = [
-  { path: '', component: AgendamentoComponent, pathMatch: 'full' },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
-];*/
 
-registerLocaleData(localePt);
+import { JarwisService } from './services/jarwis.service';
+import { TokenService } from './services/token.service';
+import { AuthService } from './services/auth.service';
+import { AfterLoginService } from './services/after-login.service';
+import { BeforeLoginService } from './services/before-login.service';
+
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+
+//import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+//import {OverlayModule} from '@angular/cdk/overlay';
+
+
+//registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
+    SignupComponent,
+    RequestResetComponent,
+    ResponseResetComponent,
+    NavbarComponent,
     AgendamentoComponent,
     NovoAgendamentoComponent,
     TimePickerComponent,
-    LoginComponent
   ],
   imports: [
     BrowserModule,
-    //RouterModule.forRoot(routes),
-    
-    BrowserModule,
-    BrowserAnimationsModule,
-    FlexLayoutModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatGridListModule,
-    MatTableModule,
-    MatFormFieldModule,
-
     FormsModule, 
-    ReactiveFormsModule,
     HttpClientModule,
-    OverlayModule,
-
-    MatInputModule,
-    MatSelectModule,
-    MatCardModule,
-    MatDividerModule,
-    MatDialogModule,
-    MatChipsModule,
-    MatBadgeModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRippleModule
+    AppRoutingModule,
+    SnotifyModule
   ],
   entryComponents: [
     NovoAgendamentoComponent,
@@ -96,9 +62,16 @@ registerLocaleData(localePt);
   providers: [
     AgendamentoService,
     BarbeiroService,
-    [{ provide: LOCALE_ID, useValue: 'pt-BR' }]
+    JarwisService,
+    TokenService,
+    AuthService, 
+    AfterLoginService, 
+    BeforeLoginService,
+    //[{provide: LOCALE_ID, useValue: 'pt-BR'}]
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    SnotifyService,
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
 
