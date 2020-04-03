@@ -1,0 +1,77 @@
+<div fxLayout="column" fxLayoutAlign="space-around left">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="50">
+            <input matInput placeholder="Busque um cliente" aria-label="Cliente" [matAutocomplete]="auto" [formControl]="searchClientsCtrl" (change)="limparIdCliente()">
+            <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngIf="isLoading" class="is-loading">Carregando...</mat-option>
+            <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let c of filteredClients" [value]="c.nome" (click)="selecionarCliente(c.id)">
+                <span>{{c.nome}} ({{c.sobrenome}})</span>
+                </mat-option>
+            </ng-container>
+            </mat-autocomplete>
+
+            <!--
+                <ng-container *ngIf="errorMsg; else elseTemplate">
+                {{errorMsg}}
+                </ng-container>
+                <ng-template #elseTemplate>
+                <h5>Selected Value: {{searchMoviesCtrl.value}}</h5>
+                </ng-template>
+                <input matInput placeholder="Cliente">
+            <mat-hint>Digite aqui seu cliente</mat-hint>-->
+        
+        </mat-form-field>
+        <mat-form-field fxFlex="40">
+            <input matInput [matDatepicker]="picker" placeholder="Escolha uma data" [(ngModel)]="this.agendamento.dataagendamento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <div>
+              <button mat-raised-button cdkOverlayOrigin 
+                      #trigger="cdkOverlayOrigin"
+                      (click)="isOpen = !isOpen">
+                      Horário
+              </button>
+            </div>
+            <ng-template cdkConnectedOverlay
+                         [cdkConnectedOverlayOrigin]="trigger"
+                         [cdkConnectedOverlayOpen]="isOpen"
+                         [cdkConnectedOverlayHasBackdrop]="true"
+                         [cdkConnectedOverlayBackdropClass]="'backdrop'"
+                         (backdropClick)="isOpen = false">
+              <app-time-picker [date]="this.agendamento.dataagendamento" (setDate)="onSetDate($event)"></app-time-picker>
+            </ng-template>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="50">
+            <mat-label>Barbeiro</mat-label>
+            <mat-select [(ngModel)]="agendamento.barbeiro_id">
+                <mat-option [value]=""></mat-option>
+                <mat-option *ngFor="let b of barbeiros" [value]="b.id">
+                    {{b.nome}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="40">
+            <mat-label>Serviço</mat-label>
+            <mat-select [(ngModel)]="agendamento.descricao">
+                <mat-option value=""></mat-option>
+                <mat-option value="BARBA">BARBA</mat-option>
+                <mat-option value="CABELO">CABELO</mat-option>
+                <mat-option value="BARBA+CABELO">BARBA+CABELO</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="alert alert-primary" [innerHtml]="htmlOfErrors"></div>
+</div>
+
+
+<br><br>
+
+<div style="text-align: center;">
+    <button mat-button color="primary" (click)="salvar()">Salvar</button>
+    <button mat-button color="warn" (click)="cancelar()">Cancelar</button>
+</div>

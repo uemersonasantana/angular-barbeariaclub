@@ -1,0 +1,32 @@
+<!--<table class="table table-around">
+    <thead>
+        <th>DATA</th>
+        <th>HORA</th>
+        <th>CLIENTE</th>
+        <th>SERVIÇO</th>
+        <th>BARBEIRO</th>
+        <th></th>
+    </thead>
+</table>-->
+
+<div>
+    <span class="help is-error" *ngIf="errorMessage">{{ errorMessage }}</span>
+    <table class="table" *ngIf="!errorMessage">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let agendamento of agendamentos">
+                <td>{{ agendamento.id }}</td>
+                <td>{{ agendamento.descricao }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<button mat-fab color="primary" class="float-button" (click)="NovoAgendamento()">
+    <mat-icon>add</mat-icon>
+</button>
