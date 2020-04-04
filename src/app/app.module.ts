@@ -29,6 +29,8 @@ import { AfterLoginService } from './services/after-login.service';
 import { BeforeLoginService } from './services/before-login.service';
 
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import {DpDatePickerModule} from 'ng2-date-picker';
 
 //import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 //import {OverlayModule} from '@angular/cdk/overlay';
@@ -53,7 +55,9 @@ import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
     FormsModule, 
     HttpClientModule,
     AppRoutingModule,
-    SnotifyModule
+    SnotifyModule,
+    AutocompleteLibModule,
+    DpDatePickerModule
   ],
   entryComponents: [
     NovoAgendamentoComponent,

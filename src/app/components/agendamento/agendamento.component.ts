@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 import { NovoAgendamentoComponent } from '../novo-agendamento/novo-agendamento.component';
 import { Agendamento, AgendamentoService } from '../../services/agendamento.service';
+import { Cliente, ClienteService } from '../../services/cliente.service';
+import { Barbeiro, BarbeiroService } from '../../services/barbeiro.service';
 import 'rxjs/Rx';
+import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 
 export interface PeriodicElement {
   name: string;
@@ -9,6 +14,8 @@ export interface PeriodicElement {
   weight: number;
   symbol: string;
 }
+
+const API_URL: string = 'http://localhost:8000/api';
 
 const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
@@ -31,17 +38,82 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class AgendamentoComponent  {
   
   agendamentos: Agendamento[];
+  clientes: Cliente[];
+  barbeiros: Barbeiro[];
+
+
   errorMessage: string;
   isLoading: boolean = true;
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  config = {
+    format: "DD/MM/YYYY",
+    /*
+    firstDayOfWeek: 'su',
+    monthFormat: 'MMM, YYYY',
+    disableKeypress: false,
+    allowMultiSelect: false,
+    closeOnSelect: undefined,
+    closeOnSelectDelay: 100,
+    onOpenDelay: 0,
+    weekDayFormat: 'ddd',
+    appendTo: document.body,
+    drops: 'down',
+    opens: 'right',
+    showNearMonthDays: true,
+    showWeekNumbers: false,
+    enableMonthSelector: true,
+    format: "YYYY-MM-DD HH:mm",
+    yearFormat: 'YYYY',
+    showGoToCurrent: true,
+    dayBtnFormat: 'DD',
+    monthBtnFormat: 'MMM',
+    hours12Format: 'hh',
+    hours24Format: 'HH',
+    meridiemFormat: 'A',
+    minutesFormat: 'mm',
+    minutesInterval: 1,
+    secondsFormat: 'ss',
+    secondsInterval: 1,
+    showSeconds: false,
+    showTwentyFourHours: true,
+    timeSeparator: ':',
+    multipleYearsNavigateBy: 10,
+    showMultipleYearsNavigation: false,
+    locale: 'zh-cn',*/
+    // min:'2017-08-29 15:50',
+    // minTime:'2017-08-29 15:50'
+  };
+  tempo: any[] = [
+    { id: 1, nome: 'Hoje' },
+    { id: 2, nome: 'Esta semana' },
+    { id: 3, nome: 'Este mês' },
+    { id: 4, nome: 'Últimos 30 dias' },
+    { id: 5, nome: 'Escolha o período' }
+  ];
+
+  errorMsg: string;
+  keyword = 'nome';
+  duedates:boolean = false;
+  
+
+  public form = {
+    cliente_id:null,
+    barbeiro_id:null,
+    tempo:null,
+    dataInicial:null,
+    dataFinal:null
+  };
 
   constructor(
-    private AgendamentoService: AgendamentoService
+    private AgendamentoService: AgendamentoService,
+    private ClienteService: ClienteService,
+    private BarbeiroService: BarbeiroService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
     this.getAgendamentos();
+    this.getClientes();
+    this.getBarbeiros();
   }
 
   getAgendamentos() {
@@ -51,6 +123,51 @@ export class AgendamentoComponent  {
             agendamentos => this.agendamentos = agendamentos,
             error => this.errorMessage = <any>error
         );
+  }
+
+  getClientes() {
+    this.ClienteService
+        .getClientes()
+        .subscribe(
+            clientes => this.clientes = clientes,
+            error => this.errorMessage = <any>error
+        );
+  }
+
+  getBarbeiros() {
+    this.BarbeiroService
+        .getBarbeiros()
+        .subscribe(
+            barbeiros => this.barbeiros = barbeiros,
+            error => this.errorMessage = <any>error
+        );
+  }
+
+  onSubmit() {
+    console.log(this.form);
+  }
+
+  onBoxDueDates(value) {
+    if (value==5) {
+      this.duedates = true
+    } else {
+      this.form.dataInicial = null
+      this.form.dataFinal = null
+      this.duedates = false
+    }
+  }
+
+  selectEvent(item) {
+    // do something with selected item
+  }
+ 
+  onChangeSearch(val: string) {
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+  
+  onFocused(e){
+    // do something when input is focused
   }
   /*NovoAgendamento() {
     const dialogRef = this.dialog.open(NovoAgendamentoComponent, 

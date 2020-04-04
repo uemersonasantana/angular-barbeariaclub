@@ -6,3 +6,6 @@ table {
     bottom: 40px;
     right: 40px;
 }
+.ng-autocomplete {
+    width: 100%;
+}

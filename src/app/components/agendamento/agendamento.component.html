@@ -1,17 +1,104 @@
-<div>
-    <span class="help is-error" *ngIf="errorMessage">{{ errorMessage }}</span>
-    <table class="table" *ngIf="!errorMessage">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let agendamento of agendamentos">
-                <td>{{ agendamento.id }}</td>
-                <td>{{ agendamento.descricao }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card">
+    <div class="card-body">
+        <form #agendamentosForm=ngForm (ngSubmit)="onSubmit()">
+            <div class="container">
+                <div class="row">
+                    <div class="col center texto-branco bg-dark">Cliente</div>
+                    <div class="col center texto-branco bg-dark">Barbeiro</div>
+                    <div class="col center texto-branco bg-dark">Tempo</div>
+                </div>                    
+                <div class="row">
+                  <div class="col">
+                    <div class="ng-autocomplete">
+                        <ng-autocomplete
+                            name="this.form.cliente_id"
+                            [(ngModel)]="this.form.cliente_id"
+                            [data]="clientes"
+                            [searchKeyword]="keyword"
+                            placeHolder="Digite o nome do cliente"
+                            (selected)='selectEvent($event)'
+                            (inputChanged)='onChangeSearch($event)'
+                            (inputFocused)='onFocused($event)'
+                            historyIdentifier="clientes"
+                            [itemTemplate]="itemTemplate"
+                            [notFoundTemplate]="notFoundTemplate">
+                        </ng-autocomplete>
+                      
+                        <ng-template #itemTemplate let-item>
+                          <a [innerHTML]="item.nome"></a>
+                        </ng-template>
+                      
+                        <ng-template #notFoundTemplate let-notFound>
+                          <div [innerHTML]="notFound"></div>
+                        </ng-template>
+                      </div>                      
+                  </div>
+                  <div class="col">
+                    <select class="custom-select" name="barbeiro_id" [(ngModel)]="form.barbeiro_id">
+                        <option *ngFor="let b of barbeiros" [value]="b.id">{{b.nome}}</option>
+                    </select>
+                  </div>
+                  <div class="col text-center">
+                    <select class="custom-select" name="tempo" [(ngModel)]="form.tempo" (change)="onBoxDueDates($event.target.value)">
+                        <option [value]="t.id" *ngFor="let t of tempo">{{t.nome}}</option>
+                    </select>
+                    <div class="container" *ngIf="duedates">
+                        <div class="row">
+                            <div class="col text-left">
+                                <label for="dataInicial" class="col-form-label">Data Inicial</label>
+                                <input class="form-control col-sm-10" name="dataInicial" autocomplete="off" [(ngModel)]="form.dataInicial" [dpDayPicker]="config" />
+                            </div>
+                            <div class="col text-left">
+                                <label for="dataFinal" class="col-form-label">Data Final</label>
+                                <input class="form-control col-sm-10" name="dataFinal" autocomplete="off" [(ngModel)]="form.dataFinal" [dpDayPicker]="config" />
+                            </div>
+                        </div>
+                    </div> 
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-center">
+                    <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Pesquisar</button>
+                  </div>
+                </div>
+              </div>
+
+        </form>
+    </div>
+</div>
+{{this.form.cliente_id}}
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary">Novo agendamento</button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <span class="help is-error" *ngIf="errorMessage">{{ errorMessage }}</span>
+        <table class="table table-around">
+            <thead class="thead-light">
+                <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Serviço</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Barbearia</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let agendamento of agendamentos">
+                    <td>{{ agendamento.dataagendamento | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ agendamento.dataagendamento | date: 'h:mm' }}</td>
+                    <td>{{ agendamento.descricao }}</td>
+                    <td>{{ agendamento.cliente.nome }}</td>
+                    <td>{{ agendamento.barbeiro.nome }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-space">Editar</button>
+                        <button type="button" class="btn btn-danger btn-space">Apagar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

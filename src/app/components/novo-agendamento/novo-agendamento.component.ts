@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {Barbeiro} from '../../modal/barbeiro';
-import {BarbeiroService} from '../../services/barbeiro.service';
+import {Barbeiro,BarbeiroService} from '../../services/barbeiro.service';
 import {Agendamento,AgendamentoService} from '../../services/agendamento.service';
 
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
