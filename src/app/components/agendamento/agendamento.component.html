@@ -46,11 +46,11 @@
                         <div class="row">
                             <div class="col text-left">
                                 <label for="dataInicial" class="col-form-label">Data Inicial</label>
-                                <input class="form-control col-sm-10" name="dataInicial" autocomplete="off" [(ngModel)]="form.dataInicial" [dpDayPicker]="config" />
+                                <input class="form-control col-sm-10" name="dataInicial" autocomplete="off" required [(ngModel)]="form.dataInicial" [dpDayPicker]="config" />
                             </div>
                             <div class="col text-left">
                                 <label for="dataFinal" class="col-form-label">Data Final</label>
-                                <input class="form-control col-sm-10" name="dataFinal" autocomplete="off" [(ngModel)]="form.dataFinal" [dpDayPicker]="config" />
+                                <input class="form-control col-sm-10" name="dataFinal" autocomplete="off" required [(ngModel)]="form.dataFinal" [dpDayPicker]="config" />
                             </div>
                         </div>
                     </div> 
@@ -61,12 +61,12 @@
                     <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Pesquisar</button>
                   </div>
                 </div>
+                <div class="row" [innerHtml]="errorMessage" [hidden]="!errorMessage"></div>
               </div>
 
         </form>
     </div>
 </div>
-{{this.form.cliente_id}}
 <div class="card">
     <div class="card-body">
         <button type="button" class="btn btn-primary">Novo agendamento</button>
@@ -74,7 +74,6 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <span class="help is-error" *ngIf="errorMessage">{{ errorMessage }}</span>
         <table class="table table-around">
             <thead class="thead-light">
                 <tr>

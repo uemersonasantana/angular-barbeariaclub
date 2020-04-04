@@ -83,6 +83,7 @@ export class AgendamentoComponent  {
     // minTime:'2017-08-29 15:50'
   };
   tempo: any[] = [
+    { id: 0, nome: 'Todos' },
     { id: 1, nome: 'Hoje' },
     { id: 2, nome: 'Esta semana' },
     { id: 3, nome: 'Este mês' },
@@ -96,11 +97,11 @@ export class AgendamentoComponent  {
   
 
   public form = {
-    cliente_id:null,
-    barbeiro_id:null,
-    tempo:null,
-    dataInicial:null,
-    dataFinal:null
+    cliente_id:'',
+    barbeiro_id:'',
+    tempo:'',
+    dataInicial:'',
+    dataFinal:''
   };
 
   constructor(
@@ -116,12 +117,12 @@ export class AgendamentoComponent  {
     this.getBarbeiros();
   }
 
-  getAgendamentos() {
+  getAgendamentos(value?:any) {
     this.AgendamentoService
-        .getAgendamentos()
+        .getAgendamentos(value)
         .subscribe(
             agendamentos => this.agendamentos = agendamentos,
-            error => this.errorMessage = <any>error
+            error => this.handleError(error)
         );
   }
 
@@ -144,7 +145,26 @@ export class AgendamentoComponent  {
   }
 
   onSubmit() {
-    console.log(this.form);
+    // Ao invés de enviar o objeto, enviamos apenas o id do cliente.
+    let c;
+    c = this.form.cliente_id;
+    
+    if ( c['id'] > 0 ) 
+      this.form.cliente_id = c['id']
+
+    this.errorMessage = null;
+    this.getAgendamentos(this.form);
+
+    this.form.cliente_id = c['nome']
+  }
+
+  handleError(error) {
+    this.errorMessage = '<table>'; 
+    for(let e of Object.keys(error.error.errors) ) {
+      this.errorMessage += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
+    }
+    this.errorMessage += '<table>';
+    //<any>error
   }
 
   onBoxDueDates(value) {

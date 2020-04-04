@@ -48,15 +48,16 @@ export class AgendamentoService {
      */
 
 
-  getAgendamentos(): Observable<Agendamento[]> {
+  getAgendamentos(value?:any): Observable<Agendamento[]> {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     let options = {
-        headers: headers
+        headers: headers,
+        params: value
     }
-    
-    return this.http.get(API_URL + '/agendamentos', options)
+
+    return this.http.get(API_URL + '/agendamentos/', options)
     .pipe(
       map((response: any) => {
         return response; 
