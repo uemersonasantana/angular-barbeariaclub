@@ -1,0 +1,66 @@
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+    <div class="card-header"><h5 class="card-title">Novo Agendamento</h5></div>
+    <div class="card-body">
+        <form #agendamentosForm=ngForm (ngSubmit)="onSubmit()">
+            <div class="container">                 
+                <div class="row">
+                    <div class="form-group">
+                        <label>Cliente</label>  
+                        <div class="ng-autocomplete">
+                            <ng-autocomplete
+                                name="this.form.cliente_id"
+                                required
+                                [(ngModel)]="this.form.cliente_id"
+                                [data]="clientes"
+                                [searchKeyword]="keyword"
+                                placeHolder="Digite o nome do cliente"
+                                (selected)='selectEvent($event)'
+                                (inputChanged)='onChangeSearch($event)'
+                                (inputFocused)='onFocused($event)'
+                                historyIdentifier="clientes"
+                                [itemTemplate]="itemTemplate"
+                                [notFoundTemplate]="notFoundTemplate">
+                            </ng-autocomplete>
+                            
+                            <ng-template #itemTemplate let-item>
+                                <a [innerHTML]="item.nome"></a>
+                            </ng-template>
+                            
+                            <ng-template #notFoundTemplate let-notFound>
+                                <div [innerHTML]="notFound"></div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>           
+                <div class="row">
+                    <div class="form-group">
+                        <label>Barbeiros</label>
+                        <select class="custom-select" name="barbeiro_id" required [(ngModel)]="form.barbeiro_id">
+                            <option *ngFor="let b of barbeiros" [value]="b.id">{{b.nome}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Serviços:</label>
+                        <select class="custom-select" name="descricao" required [(ngModel)]="form.descricao">
+                            <option *ngFor="let s of servicos" [value]="s.nome">{{s.nome}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="dataagendamento" class="col-form-label">Data e Hora</label>
+                        <input class="form-control col-sm-10" name="dataagendamento" autocomplete="off" required [(ngModel)]="form.dataagendamento" mode="daytime" [dpDayPicker]="config" />
+                    </div>
+                </div>
+                <div class="row" [innerHtml]="error" [hidden]="!error"></div>
+                <div class="row">
+                  <div class="col text-center">
+                    <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Salvar</button>
+                  </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -7,6 +7,7 @@ import {ResponseResetComponent} from './components/password/response-reset/respo
 import {BeforeLoginService} from './services/before-login.service';
 import {AfterLoginService} from './services/after-login.service';
 import {AgendamentoComponent} from './components/agendamento/agendamento.component'
+import {CeAgendamentoComponent} from './components/ce/agendamento/ce-agendamento.component'
 
 
 const appRoutes: Routes = [
@@ -21,11 +22,6 @@ const appRoutes: Routes = [
     canActivate: [BeforeLoginService]
  },
   {
-    path: 'agendamentos',
-    component: AgendamentoComponent,
-    canActivate: [AfterLoginService]
- },
-  {
     path: 'request-password-reset',
     component: RequestResetComponent,
     canActivate: [BeforeLoginService]
@@ -34,12 +30,32 @@ const appRoutes: Routes = [
     path: 'response-password-reset',
     component: ResponseResetComponent,
     canActivate: [BeforeLoginService]
- },
+ }
+
+ ,{
+    path: 'agendamentos',
+    component: AgendamentoComponent,
+    canActivate: [AfterLoginService]
+ }
+];
+
+const appRoutesChildren: Routes = [
+  {
+  path:  'agendamentos',
+  component:  AgendamentoComponent,
+    children: [
+      {
+      path:  'ce',
+      component:  CeAgendamentoComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(appRoutes)
+    ,RouterModule.forChild(appRoutesChildren)
   ],
   exports: [RouterModule]
 })

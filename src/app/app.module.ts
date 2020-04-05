@@ -12,8 +12,7 @@ import {BarbeiroService} from './services/barbeiro.service';
 import {AppComponent} from './app.component';
 
 import {AgendamentoComponent} from './components/agendamento/agendamento.component';
-import {NovoAgendamentoComponent} from './components/novo-agendamento/novo-agendamento.component';
-import {TimePickerComponent} from './components/time-picker/time-picker.component';
+import {CeAgendamentoComponent} from './components/ce/agendamento/ce-agendamento.component';
 
 import {LoginComponent} from './components/login/login.component';
 import {SignupComponent} from './components/signup/signup.component';
@@ -47,8 +46,7 @@ import {DpDatePickerModule} from 'ng2-date-picker';
     ResponseResetComponent,
     NavbarComponent,
     AgendamentoComponent,
-    NovoAgendamentoComponent,
-    TimePickerComponent,
+    CeAgendamentoComponent
   ],
   imports: [
     BrowserModule,
@@ -58,10 +56,6 @@ import {DpDatePickerModule} from 'ng2-date-picker';
     SnotifyModule,
     AutocompleteLibModule,
     DpDatePickerModule
-  ],
-  entryComponents: [
-    NovoAgendamentoComponent,
-    TimePickerComponent
   ],
   providers: [
     AgendamentoService,

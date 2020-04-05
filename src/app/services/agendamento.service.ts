@@ -69,20 +69,29 @@ export class AgendamentoService {
       );
   }
 
-  addAgendamentos(agendamento): Observable<Agendamento[]> {
+  postAgendamento(agendamento): Observable<Agendamento[]> {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
     let options = {
         headers: headers
     }
+
+    let tipoForm:string;
+
+    if ( agendamento.id == '' ) {
+      tipoForm = 'novo'
+    } else { 
+      tipoForm = 'editar'
+    }
     
-    return this.http.post(API_URL + '/agendamentos/novo', agendamento, options)
+    return this.http.post(API_URL + '/agendamento/'+tipoForm, agendamento, options)
     .pipe(
       map((response: any) => {
         return response; 
       }),
       catchError(error => {
+        console.log(error)
         return throwError(error);
       })
       

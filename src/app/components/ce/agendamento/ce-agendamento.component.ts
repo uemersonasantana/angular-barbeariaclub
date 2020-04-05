@@ -1,35 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Agendamento, AgendamentoService } from '../../services/agendamento.service';
-import { Cliente, ClienteService } from '../../services/cliente.service';
-import { Barbeiro, BarbeiroService } from '../../services/barbeiro.service';
-import 'rxjs/Rx';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { Agendamento, AgendamentoService } from '../../../services/agendamento.service';
+import { Cliente, ClienteService } from '../../../services/cliente.service';
+import { Barbeiro, BarbeiroService } from '../../../services/barbeiro.service';
+import { TokenService } from 'src/app/services/token.service';
 
 const API_URL: string = 'http://localhost:8000/api';
 
 @Component({
-  selector: 'app-agendamento',
-  templateUrl: './agendamento.component.html',
-  styleUrls: ['./agendamento.component.css']
+  selector: 'app-ce-agendamento',
+  templateUrl: './ce-agendamento.component.html',
+  styleUrls: ['./ce-agendamento.component.css']
 })
-export class AgendamentoComponent  {
-  
-  agendamentos: Agendamento[];
+export class CeAgendamentoComponent implements OnInit {
+
+  agendamento: Agendamento[];
   clientes: Cliente[];
   barbeiros: Barbeiro[];
 
-
-  errorMessage: string;
   isLoading: boolean = true;
   config = {
-    format: "DD/MM/YYYY",
+    format: "DD/MM/YYYY HH:mm",
     /*
     firstDayOfWeek: 'su',
     monthFormat: 'MMM, YYYY',
@@ -66,46 +57,55 @@ export class AgendamentoComponent  {
     // min:'2017-08-29 15:50',
     // minTime:'2017-08-29 15:50'
   };
-  tempo: any[] = [
-    { id: 0, nome: 'Todos' },
-    { id: 1, nome: 'Hoje' },
-    { id: 2, nome: 'Esta semana' },
-    { id: 3, nome: 'Este mês' },
-    { id: 4, nome: 'Últimos 30 dias' },
-    { id: 5, nome: 'Escolha o período' }
+  servicos: any[] = [
+    { nome: 'BARBA' },
+    { nome: 'CABELO' },
+    { nome: 'BARBA+CABELO' }
   ];
-
-  errorMsg: string;
+  
+  error:any;
   keyword = 'nome';
   duedates:boolean = false;
-  
 
   public form = {
+    id:'',
+    descricao:'',
     cliente_id:'',
     barbeiro_id:'',
-    tempo:'',
-    dataInicial:'',
-    dataFinal:''
+    dataagendamento:'',
+    empresa_id:1,
+    user_id:1
   };
+
 
   constructor(
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
     private BarbeiroService: BarbeiroService,
+    private Token: TokenService,
     private http: HttpClient
   ) {}
 
-  ngOnInit() {
-    this.getAgendamentos();
+  ngOnInit(): void {
+    this.getAgendamento();
     this.getClientes();
     this.getBarbeiros();
   }
 
-  getAgendamentos(value?:any) {
+  getAgendamento(value?:any) {
     this.AgendamentoService
         .getAgendamentos(value)
         .subscribe(
-            agendamentos => this.agendamentos = agendamentos,
+            agendamentos => this.agendamento = agendamentos,
+            error => this.handleError(error)
+        );
+  }
+
+  postAgendamento(value?:any) {
+    this.AgendamentoService
+        .postAgendamento(value)
+        .subscribe(
+            agendamentos => this.agendamento = agendamentos,
             error => this.handleError(error)
         );
   }
@@ -115,7 +115,7 @@ export class AgendamentoComponent  {
         .getClientes()
         .subscribe(
             clientes => this.clientes = clientes,
-            error => this.errorMessage = <any>error
+            error => this.error = <any>error
         );
   }
 
@@ -124,7 +124,7 @@ export class AgendamentoComponent  {
         .getBarbeiros()
         .subscribe(
             barbeiros => this.barbeiros = barbeiros,
-            error => this.errorMessage = <any>error
+            error => this.error = <any>error
         );
   }
 
@@ -136,30 +136,21 @@ export class AgendamentoComponent  {
     if ( c['id'] > 0 ) 
       this.form.cliente_id = c['id']
 
-    this.errorMessage = null;
-    this.getAgendamentos(this.form);
+    this.error = null;
+    this.postAgendamento(this.form);
 
     this.form.cliente_id = c['nome']
   }
 
   handleError(error) {
-    this.errorMessage = '<table>'; 
+    this.error = '<table>'; 
     for(let e of Object.keys(error.error.errors) ) {
-      this.errorMessage += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
+      this.error += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
     }
-    this.errorMessage += '<table>';
+    this.error += '<table>';
     //<any>error
   }
 
-  onBoxDueDates(value) {
-    if (value==5) {
-      this.duedates = true
-    } else {
-      this.form.dataInicial = null
-      this.form.dataFinal = null
-      this.duedates = false
-    }
-  }
 
   selectEvent(item) {
     // do something with selected item
