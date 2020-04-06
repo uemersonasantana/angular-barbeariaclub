@@ -11,7 +11,7 @@
 .btn-space {
     margin-right: 5px;
 }
-.col {
+.CustomCol {
     border:1px solid black;
     padding: 10px;
 }
@@ -24,3 +24,5 @@
     display: table;
     margin: 0 auto;
 }  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

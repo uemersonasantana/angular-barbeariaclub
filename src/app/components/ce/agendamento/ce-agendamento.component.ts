@@ -4,6 +4,8 @@ import { Agendamento, AgendamentoService } from '../../../services/agendamento.s
 import { Cliente, ClienteService } from '../../../services/cliente.service';
 import { Barbeiro, BarbeiroService } from '../../../services/barbeiro.service';
 import { TokenService } from 'src/app/services/token.service';
+import {NgbDateStruct,NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import { MatDialogRef } from '@angular/material/dialog';
 
 const API_URL: string = 'http://localhost:8000/api';
 
@@ -14,11 +16,15 @@ const API_URL: string = 'http://localhost:8000/api';
 })
 export class CeAgendamentoComponent implements OnInit {
 
+  model:NgbDateStruct;
+  data:Date;
+  time:NgbTimeStruct;
+
   agendamento: Agendamento[];
   clientes: Cliente[];
   barbeiros: Barbeiro[];
+  
 
-  isLoading: boolean = true;
   config = {
     format: "DD/MM/YYYY HH:mm",
     /*
@@ -62,7 +68,10 @@ export class CeAgendamentoComponent implements OnInit {
     { nome: 'CABELO' },
     { nome: 'BARBA+CABELO' }
   ];
-  
+
+
+
+  isLoading: boolean = true;
   error:any;
   keyword = 'nome';
   duedates:boolean = false;
@@ -79,12 +88,15 @@ export class CeAgendamentoComponent implements OnInit {
 
 
   constructor(
+    public dialogRef: MatDialogRef<CeAgendamentoComponent>,
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
     private BarbeiroService: BarbeiroService,
     private Token: TokenService,
     private http: HttpClient
   ) {}
+
+  
 
   ngOnInit(): void {
     this.getAgendamento();
@@ -128,18 +140,41 @@ export class CeAgendamentoComponent implements OnInit {
         );
   }
 
+  pad(num:number, size:number): string {
+      let s = num+"";
+      while (s.length < size) s = "0" + s;
+      return s;
+  }
+  
   onSubmit() {
     // Ao invés de enviar o objeto, enviamos apenas o id do cliente.
-    let c;
-    c = this.form.cliente_id;
+    let c:any
+    if (this.form.cliente_id) {
+      c = this.form.cliente_id;
     
-    if ( c['id'] > 0 ) 
-      this.form.cliente_id = c['id']
+      if ( c['id'] > 0 ) {
+        this.form.cliente_id = c['id']
+      }
+    }
+
+    if ( this.data && this.time ) {
+      this.form.dataagendamento = this.data + ' ' + this.pad(this.time.hour,2) + ':' + this.pad(this.time.minute,2);
+    } else {
+      this.form.dataagendamento = ''
+    }
+
+    console.log(this.form.dataagendamento)
 
     this.error = null;
     this.postAgendamento(this.form);
 
-    this.form.cliente_id = c['nome']
+    if (this.form.cliente_id) {
+      this.form.cliente_id = c['nome']
+    }
+  }
+  
+  cancelar() {
+    this.dialogRef.close(null);
   }
 
   handleError(error) {

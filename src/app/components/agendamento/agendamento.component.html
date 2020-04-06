@@ -3,16 +3,16 @@
         <form #agendamentosForm=ngForm (ngSubmit)="onSubmit()">
             <div class="container">
                 <div class="row">
-                    <div class="col center texto-branco bg-dark">Cliente</div>
-                    <div class="col center texto-branco bg-dark">Barbeiro</div>
-                    <div class="col center texto-branco bg-dark">Tempo</div>
+                    <div class="col-4 CustomCol center texto-branco bg-dark">Cliente</div>
+                    <div class="col-4 CustomCol center texto-branco bg-dark">Barbeiro</div>
+                    <div class="col-4 CustomCol center texto-branco bg-dark">Tempo</div>
                 </div>                    
                 <div class="row">
-                  <div class="col">
+                  <div class="col-4 CustomCol">
                     <div class="ng-autocomplete">
                         <ng-autocomplete
-                            name="this.form.cliente_id"
-                            [(ngModel)]="this.form.cliente_id"
+                            name="form.cliente_id"
+                            [(ngModel)]="form.cliente_id"
                             [data]="clientes"
                             [searchKeyword]="keyword"
                             placeHolder="Digite o nome do cliente"
@@ -33,31 +33,74 @@
                         </ng-template>
                       </div>                      
                   </div>
-                  <div class="col">
+                  <div class="col-4 CustomCol">
                     <select class="custom-select" name="barbeiro_id" [(ngModel)]="form.barbeiro_id">
                         <option *ngFor="let b of barbeiros" [value]="b.id">{{b.nome}}</option>
                     </select>
                   </div>
-                  <div class="col text-center">
+                  <div class="col-4 CustomCol text-center">
                     <select class="custom-select" name="tempo" [(ngModel)]="form.tempo" (change)="onBoxDueDates($event.target.value)">
                         <option [value]="t.id" *ngFor="let t of tempo">{{t.nome}}</option>
                     </select>
                     <div class="container" *ngIf="duedates">
                         <div class="row">
-                            <div class="col text-left">
-                                <label for="dataInicial" class="col-form-label">Data Inicial</label>
-                                <input class="form-control col-sm-10" name="dataInicial" autocomplete="off" required [(ngModel)]="form.dataInicial" [dpDayPicker]="config" />
+                            <div class="form-group hidden">
+                                <div class="input-group">
+                                  <input name="datepicker" style="border:0;"
+                                         class="form-control"
+                                         ngbDatepicker
+                                         #datepicker="ngbDatepicker"
+                                         [autoClose]="'outside'"
+                                         (dateSelect)="onDateSelection($event)"
+                                         [displayMonths]="2"
+                                         [dayTemplate]="t"
+                                         outsideDays="hidden"
+                                         [startDate]="fromDate!">
+                                  <ng-template #t let-date let-focused="focused">
+                                    <span class="custom-day"
+                                          [class.focused]="focused"
+                                          [class.range]="isRange(date)"
+                                          [class.faded]="isHovered(date) || isInside(date)"
+                                          (mouseenter)="hoveredDate = date"
+                                          (mouseleave)="hoveredDate = null">
+                                      {{ date.day }}
+                                    </span>
+                                  </ng-template>
+                                </div>
                             </div>
-                            <div class="col text-left">
-                                <label for="dataFinal" class="col-form-label">Data Final</label>
-                                <input class="form-control col-sm-10" name="dataFinal" autocomplete="off" required [(ngModel)]="form.dataFinal" [dpDayPicker]="config" />
+
+                            <div class="col-6 text-left" style="margin-top:10px;margin-right:-50px;">
+                                <input #dataInicial
+                                        class="form-control col-sm-10" placeholder="Inicial"
+                                        name="dataInicial"
+                                        autocomplete="off"
+                                        readonly
+                                        [(ngModel)]="form.dataInicial"
+                                        [value]="formatter.format(fromDate)"
+                                        (input)="fromDate = validateInput(fromDate, dataInicial.value)">
+                            </div>
+                            <div class="col-1 text-left" style="margin-top:10px;">
+                                <button class="btn btn-outline-secondary" style="padding:4px;" (click)="datepicker.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                            </div>
+                            <div class="col-6 text-left" style="margin-top:10px;margin-right:-50px;">
+                                <input #dataFinal
+                                        class="form-control col-sm-10" placeholder="Final"
+                                        name="dataFinal"
+                                        autocomplete="off"
+                                        readonly
+                                        [(ngModel)]="form.dataFinal"
+                                        [value]="formatter.format(toDate)"
+                                        (input)="toDate = validateInput(toDate, dataFinal.value)">
+                            </div>
+                            <div class="col-1 text-left" style="margin-top:10px;">
+                                <button class="btn btn-outline-secondary" style="padding:4px;" (click)="datepicker.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
                             </div>
                         </div>
                     </div> 
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col text-center">
+                  <div class="col CustomCol text-center">
                     <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Pesquisar</button>
                   </div>
                 </div>
@@ -70,12 +113,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="ce">Novo agendamento</button>
+                <button type="button" class="btn btn-primary" (click)="openDialog()">Novo agendamento</button>
             </div>
         </div>
     </div>

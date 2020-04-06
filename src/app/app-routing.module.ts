@@ -39,6 +39,7 @@ const appRoutes: Routes = [
  }
 ];
 
+/*
 const appRoutesChildren: Routes = [
   {
   path:  'agendamentos',
@@ -50,12 +51,12 @@ const appRoutesChildren: Routes = [
       }
     ]
   }
-];
+];*/
 
 @NgModule({
   imports: [
     RouterModule.forRoot(appRoutes)
-    ,RouterModule.forChild(appRoutesChildren)
+    //,RouterModule.forChild(appRoutesChildren)
   ],
   exports: [RouterModule]
 })

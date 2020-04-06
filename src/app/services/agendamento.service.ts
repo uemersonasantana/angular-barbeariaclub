@@ -22,10 +22,9 @@ const API_URL: string = 'http://localhost:8000/api';
 export class AgendamentoService {
 
   public res:any;
-  
+
   constructor(
     private http: HttpClient
-    
     ) {
   }
 
@@ -97,5 +96,4 @@ export class AgendamentoService {
       
       );
   }
-
 }
