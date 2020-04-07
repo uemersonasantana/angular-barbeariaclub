@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -22,18 +22,11 @@ export class BarbeiroService {
 
   public barbeiros: Barbeiro[] = [];
 
-  constructor(private http: HttpClient) { 
+  constructor(private _http: HttpClient) { 
   }
 
   getBarbeiros(): Observable<Barbeiro[]> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    let options = {
-        headers: headers
-    }
-    
-    return this.http.get(API_URL + '/barbeiros', options)
+    return this._http.get(API_URL + '/barbeiros')
     .pipe(
       map((response: any) => {
         return response; 

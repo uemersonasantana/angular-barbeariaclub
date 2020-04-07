@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -22,7 +22,7 @@ export class ClienteService {
   public res:any;
 
   constructor(
-    private http: HttpClient
+    private _http: HttpClient
   ) { 
     
   }
@@ -36,14 +36,8 @@ export class ClienteService {
   });*/
 
   getClientes(): Observable<Cliente[]> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    let options = {
-        headers: headers
-    }
     
-    return this.http.get(API_URL + '/clientes', options)
+    return this._http.get(API_URL + '/clientes')
     .pipe(
       map((response: any) => {
         return response; 

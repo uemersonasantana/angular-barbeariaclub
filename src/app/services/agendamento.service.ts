@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -24,7 +24,7 @@ export class AgendamentoService {
   public res:any;
 
   constructor(
-    private http: HttpClient
+    private _http: HttpClient
     ) {
   }
 
@@ -48,15 +48,11 @@ export class AgendamentoService {
 
 
   getAgendamentos(value?:any): Observable<Agendamento[]> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
     let options = {
-        headers: headers,
         params: value
     }
 
-    return this.http.get(API_URL + '/agendamentos/', options)
+    return this._http.post(API_URL + '/agendamentos/', options)
     .pipe(
       map((response: any) => {
         return response; 
@@ -69,13 +65,6 @@ export class AgendamentoService {
   }
 
   postAgendamento(agendamento): Observable<Agendamento[]> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    let options = {
-        headers: headers
-    }
-
     let tipoForm:string;
 
     if ( agendamento.id == '' ) {
@@ -84,7 +73,7 @@ export class AgendamentoService {
       tipoForm = 'editar'
     }
     
-    return this.http.post(API_URL + '/agendamento/'+tipoForm, agendamento, options)
+    return this._http.post(API_URL + '/agendamento/'+tipoForm, agendamento)
     .pipe(
       map((response: any) => {
         return response; 

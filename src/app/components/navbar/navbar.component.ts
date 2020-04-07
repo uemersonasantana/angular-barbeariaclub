@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { JarwisService } from '../../services/jarwis.service';
 import { TokenService } from '../../services/token.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private Auth: AuthService,
     private router: Router,
+    private Jarwis: JarwisService,
     private Token: TokenService
   ) { }
 
@@ -22,6 +24,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(event: MouseEvent) {
+    this.Jarwis.logout('').subscribe();
     event.preventDefault();
     this.Token.remove();
     this.Auth.changeAuthStatus(false);

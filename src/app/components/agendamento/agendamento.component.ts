@@ -208,8 +208,8 @@ export class AgendamentoComponent {
 
   ngOnInit() {
     this.getAgendamentos();
-    this.getClientes();
-    this.getBarbeiros();
+    //this.getClientes();
+    //this.getBarbeiros();
   }
 
   getAgendamentos(value?:any) {
