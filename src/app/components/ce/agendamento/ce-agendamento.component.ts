@@ -163,8 +163,6 @@ export class CeAgendamentoComponent implements OnInit {
       this.form.dataagendamento = ''
     }
 
-    console.log(this.form.dataagendamento)
-
     this.error = null;
     this.postAgendamento(this.form);
 

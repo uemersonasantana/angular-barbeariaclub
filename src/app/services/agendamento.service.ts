@@ -21,11 +21,19 @@ const API_URL: string = 'http://localhost:8000/api';
 })
 export class AgendamentoService {
 
+  public agendamentos: Agendamento[] = [];
   public res:any;
 
   constructor(
     private _http: HttpClient
     ) {
+      this._http.post(API_URL + '/agendamentos/find/', null).subscribe(
+        (agendamentos: any[]) => {
+          for(let p of agendamentos) {
+            this.agendamentos.push(p);
+          }
+        }
+      );
   }
 
 /*
@@ -46,13 +54,10 @@ export class AgendamentoService {
      * }
      */
 
+    
 
-  getAgendamentos(value?:any): Observable<Agendamento[]> {
-    let options = {
-        params: value
-    }
-
-    return this._http.post(API_URL + '/agendamentos/', options)
+  getAgendamentos(params?:any): Observable<Agendamento[]> {
+    return this._http.post(API_URL + '/agendamentos/find/', params)
     .pipe(
       map((response: any) => {
         return response; 
@@ -68,9 +73,9 @@ export class AgendamentoService {
     let tipoForm:string;
 
     if ( agendamento.id == '' ) {
-      tipoForm = 'novo'
+      tipoForm = 'new'
     } else { 
-      tipoForm = 'editar'
+      tipoForm = 'edit'
     }
     
     return this._http.post(API_URL + '/agendamento/'+tipoForm, agendamento)
@@ -84,5 +89,15 @@ export class AgendamentoService {
       })
       
       );
+  }
+  
+  apagar(id: number) {
+    this._http.delete(API_URL + '/agendamento/' + id).subscribe(
+      (event) => {
+        console.log(this.agendamentos)
+        let i = this.agendamentos.findIndex((p) => p.id == id);
+        if (i>=0)
+          this.agendamentos.splice(i,1);
+      });
   }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, Injectable} from '@angular/core';
+import {Component, OnInit, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Agendamento, AgendamentoService } from '../../services/agendamento.service';
-import { Cliente, ClienteService } from '../../services/cliente.service';
-import { Barbeiro, BarbeiroService } from '../../services/barbeiro.service';
+import {Agendamento, AgendamentoService} from '../../services/agendamento.service';
+import {Cliente, ClienteService} from '../../services/cliente.service';
+import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
 import {NgbDate, NgbCalendar, NgbDateParserFormatter,NgbDatepickerI18n, NgbDateStruct, NgbDateAdapter} from '@ng-bootstrap/ng-bootstrap';
 import {GlobalConstants} from '../../global-constants';
 import {MatDialog} from '@angular/material/dialog';
@@ -22,7 +22,7 @@ const I18N_VALUES = {
   'pt': {
     weekdays: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
     months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-  }
+ }
   // other languages you would support
 };
 
@@ -39,21 +39,21 @@ export class CustomDatepickerI18n extends NgbDatepickerI18n {
 
   constructor(private _i18n: I18n) {
     super();
-  }
+ }
 
   getWeekdayShortName(weekday: number): string {
     return I18N_VALUES[this._i18n.language].weekdays[weekday - 1];
-  }
+ }
   getMonthShortName(month: number): string {
     return I18N_VALUES[this._i18n.language].months[month - 1];
-  }
+ }
   getMonthFullName(month: number): string {
     return this.getMonthShortName(month);
-  }
+ }
 
   getDayAriaLabel(date: NgbDateStruct): string {
     return `${date.day}-${date.month}-${date.year}`;
-  }
+ }
 }
 
 /**
@@ -71,14 +71,14 @@ export class CustomAdapter extends NgbDateAdapter<string> {
         day : parseInt(date[0], 10),
         month : parseInt(date[1], 10),
         year : parseInt(date[2], 10)
-      };
-    }
+     };
+   }
     return null;
-  }
+ }
 
   toModel(date: NgbDateStruct | null): string | null {
     return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : null;
-  }
+ }
 }
 
 /**
@@ -96,14 +96,14 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
         day : parseInt(date[0], 10),
         month : parseInt(date[1], 10),
         year : parseInt(date[2], 10)
-      };
-    }
+     };
+   }
     return null;
-  }
+ }
 
   format(date: NgbDateStruct | null): string {
     return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : '';
-  }
+ }
 }
 
 @Component({
@@ -162,14 +162,14 @@ export class AgendamentoComponent {
     locale: 'zh-cn',*/
     // min:'2017-08-29 15:50',
     // minTime:'2017-08-29 15:50'
-  };
+ };
   tempo: any[] = [
-    { id: 0, nome: 'Todos' },
-    { id: 1, nome: 'Hoje' },
-    { id: 2, nome: 'Esta semana' },
-    { id: 3, nome: 'Este mês' },
-    { id: 4, nome: 'Últimos 30 dias' },
-    { id: 5, nome: 'Escolha o período' }
+    {id: 0, nome: 'Todos'},
+    {id: 1, nome: 'Hoje'},
+    {id: 2, nome: 'Esta semana'},
+    {id: 3, nome: 'Este mês'},
+    {id: 4, nome: 'Últimos 30 dias'},
+    {id: 5, nome: 'Escolha o período'}
   ];
 
   errorMsg: string;
@@ -186,7 +186,7 @@ export class AgendamentoComponent {
     tempo:0,
     dataInicial: null,
     dataFinal: null
-  };
+ };
 
   constructor(
     private AgendamentoService: AgendamentoService,
@@ -201,25 +201,32 @@ export class AgendamentoComponent {
     //this.fromDate = calendar.getToday();
     //this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
     
-  }
+ }
 
   //@ViewChild('teste') contentElement: ElementRef;
   
 
   ngOnInit() {
-    this.getAgendamentos();
-    //this.getClientes();
-    //this.getBarbeiros();
-  }
+    this.agendamentos = this.AgendamentoService.agendamentos;
+    
+    //this.getAgendamentos();
+    this.getClientes();
+    this.getBarbeiros();
+ }
 
   getAgendamentos(value?:any) {
     this.AgendamentoService
         .getAgendamentos(value)
         .subscribe(
-            agendamentos => this.agendamentos = agendamentos,
+            agendamentos => {
+              this.agendamentos = []
+              for(let t of agendamentos) { 
+                this.agendamentos.push(t);
+              }
+            },
             error => this.handleError(error)
         );
-  }
+ }
 
   getClientes() {
     this.ClienteService
@@ -228,7 +235,7 @@ export class AgendamentoComponent {
             clientes => this.clientes = clientes,
             error => this.errorMessage = <any>error
         );
-  }
+ }
 
   getBarbeiros() {
     this.BarbeiroService
@@ -237,19 +244,19 @@ export class AgendamentoComponent {
             barbeiros => this.barbeiros = barbeiros,
             error => this.errorMessage = <any>error
         );
-  }
+ }
 
   onSubmit() {
     if (this.fromDate) {
       this.form.dataInicial = this.fromDate.day+'/'+this.fromDate.month+'/'+this.fromDate.year;
-    } else {
+   } else {
       this.form.dataInicial = ''
-    }
+   }
     if (this.toDate) {
       this.form.dataFinal = this.toDate.day+'/'+this.toDate.month+'/'+this.toDate.year;
-    } else {
+   } else {
       this.form.dataFinal = ''
-    }
+   }
     
     // Ao invés de enviar o objeto, enviamos apenas o id do cliente.
     let c:any;
@@ -258,76 +265,76 @@ export class AgendamentoComponent {
       
       if ( c['id'] > 0 ) {
         this.form.cliente_id = c['id']
-      }
-    }
+     }
+   }
 
     this.errorMessage = null;
     this.getAgendamentos(this.form);
 
     if (this.form.cliente_id) {
       this.form.cliente_id = c['nome']
-    }
-  }
+   }
+ }
 
   handleError(error) {
     this.errorMessage = '<table>'; 
     for(let e of Object.keys(error.error.errors) ) {
       this.errorMessage += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
-    }
+   }
     this.errorMessage += '<table>';
     //<any>error
-  }
+ }
 
   onBoxDueDates(value) {
     if (value==5) {
       this.duedates = true
-    } else {
+   } else {
       this.form.dataInicial = null
       this.form.dataFinal = null
       this.duedates = false
-    }
-  }
+   }
+ }
 
   selectEvent(item) {
     // do something with selected item
-  }
+ }
  
   onChangeSearch(val: string) {
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
-  }
+ }
   
   onFocused(e){
     // do something when input is focused
-  }
+ }
 
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
-    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+   } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-    } else {
+   } else {
       this.toDate = null;
       this.fromDate = date;
-    }
-  }
+   }
+ }
 
   isHovered(date: NgbDate) {
     return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
-  }
+ }
 
   isInside(date: NgbDate) {
     return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
-  }
+ }
 
   isRange(date: NgbDate) {
     return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
-  }
+ }
 
   validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     const parsed = this.formatter.parse(input);
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
-  }
+ }
 
   openDialog() {
     const dialogRef = this.dialog.open(CeAgendamentoComponent);
@@ -336,8 +343,13 @@ export class AgendamentoComponent {
       (result) => {
         if (result) {
           //this.postService.salvar(result.post, result.arquivo);
-        }
-      }
+       }
+     }
     );
+ }
+
+ apagarAgendamento(id:number) {
+    this.AgendamentoService.apagar(id);
   }
+
 }

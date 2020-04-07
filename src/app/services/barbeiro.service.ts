@@ -26,7 +26,9 @@ export class BarbeiroService {
   }
 
   getBarbeiros(): Observable<Barbeiro[]> {
-    return this._http.get(API_URL + '/barbeiros')
+    let options = {}
+
+    return this._http.post(API_URL + '/barbeiros',options)
     .pipe(
       map((response: any) => {
         return response; 

@@ -37,7 +37,9 @@ export class ClienteService {
 
   getClientes(): Observable<Cliente[]> {
     
-    return this._http.get(API_URL + '/clientes')
+    let options = {}
+    
+    return this._http.post(API_URL + '/clientes',options)
     .pipe(
       map((response: any) => {
         return response; 

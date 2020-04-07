@@ -35,6 +35,7 @@
                   </div>
                   <div class="col-4 CustomCol">
                     <select class="custom-select" name="barbeiro_id" [(ngModel)]="form.barbeiro_id">
+                        <option [value]="0">Todos</option>
                         <option *ngFor="let b of barbeiros" [value]="b.id">{{b.nome}}</option>
                     </select>
                   </div>
@@ -140,7 +141,7 @@
                     <td>{{ agendamento.barbeiro.nome }}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-space">Editar</button>
-                        <button type="button" class="btn btn-danger btn-space">Apagar</button>
+                        <button type="button" class="btn btn-danger btn-space" (click)="apagarAgendamento(agendamento.id)">Apagar</button>
                     </td>
                 </tr>
             </tbody>
