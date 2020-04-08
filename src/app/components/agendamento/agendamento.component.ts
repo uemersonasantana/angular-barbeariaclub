@@ -5,7 +5,7 @@ import {Cliente, ClienteService} from '../../services/cliente.service';
 import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
 import {NgbDate, NgbCalendar, NgbDateParserFormatter,NgbDatepickerI18n, NgbDateStruct, NgbDateAdapter} from '@ng-bootstrap/ng-bootstrap';
 import {GlobalConstants} from '../../global-constants';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {CeAgendamentoComponent} from '../../components/ce/agendamento/ce-agendamento.component'
 import 'rxjs/Rx';
 
@@ -16,7 +16,7 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-const API_URL: string = GlobalConstants.API_URL;
+const API_URL:string = GlobalConstants.API_URL;
 
 const I18N_VALUES = {
   'pt': {
@@ -126,42 +126,7 @@ export class AgendamentoComponent {
   errorMessage: string;
   isLoading: boolean = true;
   config = {
-    format: "DD/MM/YYYY",
-    /*
-    firstDayOfWeek: 'su',
-    monthFormat: 'MMM, YYYY',
-    disableKeypress: false,
-    allowMultiSelect: false,
-    closeOnSelect: undefined,
-    closeOnSelectDelay: 100,
-    onOpenDelay: 0,
-    weekDayFormat: 'ddd',
-    appendTo: document.body,
-    drops: 'down',
-    opens: 'right',
-    showNearMonthDays: true,
-    showWeekNumbers: false,
-    enableMonthSelector: true,
-    format: "YYYY-MM-DD HH:mm",
-    yearFormat: 'YYYY',
-    showGoToCurrent: true,
-    dayBtnFormat: 'DD',
-    monthBtnFormat: 'MMM',
-    hours12Format: 'hh',
-    hours24Format: 'HH',
-    meridiemFormat: 'A',
-    minutesFormat: 'mm',
-    minutesInterval: 1,
-    secondsFormat: 'ss',
-    secondsInterval: 1,
-    showSeconds: false,
-    showTwentyFourHours: true,
-    timeSeparator: ':',
-    multipleYearsNavigateBy: 10,
-    showMultipleYearsNavigation: false,
-    locale: 'zh-cn',*/
-    // min:'2017-08-29 15:50',
-    // minTime:'2017-08-29 15:50'
+    format: "DD/MM/YYYY"
  };
   tempo: any[] = [
     {id: 0, nome: 'Todos'},
@@ -336,13 +301,20 @@ export class AgendamentoComponent {
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
  }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(CeAgendamentoComponent);
+  openDialog(id?:number) {
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.data = {
+        id: id
+    };
+
+    const dialogRef = this.dialog.open(CeAgendamentoComponent,dialogConfig);
+    
     dialogRef.afterClosed().subscribe(
       (result) => {
         if (result) {
-          //this.postService.salvar(result.post, result.arquivo);
+          this.AgendamentoService.delLinha(result[0].id);
+          this.AgendamentoService.addLinha(result);
        }
      }
     );

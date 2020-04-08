@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http'
+import {Observable, throwError} from 'rxjs';
+import {map, catchError} from 'rxjs/operators';
+import {GlobalConstants} from '../global-constants';
 
 export interface Barbeiro {
   id: string,
@@ -13,7 +14,7 @@ export interface Barbeiro {
   user_id?: number
 }
 
-const API_URL: string = 'http://localhost:8000/api';
+const API_URL:string = GlobalConstants.API_URL;
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +27,7 @@ export class BarbeiroService {
   }
 
   getBarbeiros(): Observable<Barbeiro[]> {
-    let options = {}
-
-    return this._http.post(API_URL + '/barbeiros',options)
+    return this._http.post(API_URL + '/barbeiros',null)
     .pipe(
       map((response: any) => {
         return response; 

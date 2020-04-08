@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {GlobalConstants} from '../global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JarwisService {
-  private baseUrl = 'http://localhost:8000/api';
+  private baseUrl:string = GlobalConstants.API_URL;
 
   constructor(
     private http: HttpClient,

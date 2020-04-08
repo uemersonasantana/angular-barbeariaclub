@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Agendamento, AgendamentoService } from '../../../services/agendamento.service';
 import { Cliente, ClienteService } from '../../../services/cliente.service';
 import { Barbeiro, BarbeiroService } from '../../../services/barbeiro.service';
 import { TokenService } from 'src/app/services/token.service';
 import {NgbDateStruct,NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 const API_URL: string = 'http://localhost:8000/api';
 
@@ -16,52 +16,30 @@ const API_URL: string = 'http://localhost:8000/api';
 })
 export class CeAgendamentoComponent implements OnInit {
 
-  model:NgbDateStruct;
+  error:any;
   data:Date;
   time:NgbTimeStruct;
+  keyword = 'nome';
+  duedates:boolean = false;
+  
+  tempClienteNome:string;
 
-  agendamento: Agendamento[];
+  agendamento: Agendamento[]  = [
+    {
+      id:null,
+      descricao:'',
+      cliente_id:null,
+      barbeiro_id:null,
+      dataagendamento:null
+    }
+];
   clientes: Cliente[];
   barbeiros: Barbeiro[];
-  
+
+  title:any;
 
   config = {
-    format: "DD/MM/YYYY HH:mm",
-    /*
-    firstDayOfWeek: 'su',
-    monthFormat: 'MMM, YYYY',
-    disableKeypress: false,
-    allowMultiSelect: false,
-    closeOnSelect: undefined,
-    closeOnSelectDelay: 100,
-    onOpenDelay: 0,
-    weekDayFormat: 'ddd',
-    appendTo: document.body,
-    drops: 'down',
-    opens: 'right',
-    showNearMonthDays: true,
-    showWeekNumbers: false,
-    enableMonthSelector: true,
-    format: "YYYY-MM-DD HH:mm",
-    yearFormat: 'YYYY',
-    showGoToCurrent: true,
-    dayBtnFormat: 'DD',
-    monthBtnFormat: 'MMM',
-    hours12Format: 'hh',
-    hours24Format: 'HH',
-    meridiemFormat: 'A',
-    minutesFormat: 'mm',
-    minutesInterval: 1,
-    secondsFormat: 'ss',
-    secondsInterval: 1,
-    showSeconds: false,
-    showTwentyFourHours: true,
-    timeSeparator: ':',
-    multipleYearsNavigateBy: 10,
-    showMultipleYearsNavigation: false,
-    locale: 'zh-cn',*/
-    // min:'2017-08-29 15:50',
-    // minTime:'2017-08-29 15:50'
+    format: "DD/MM/YYYY HH:mm"
   };
   servicos: any[] = [
     { nome: 'BARBA' },
@@ -69,37 +47,38 @@ export class CeAgendamentoComponent implements OnInit {
     { nome: 'BARBA+CABELO' }
   ];
 
-
-
-  isLoading: boolean = true;
-  error:any;
-  keyword = 'nome';
-  duedates:boolean = false;
-
-  public form = {
-    id:'',
-    descricao:'',
-    cliente_id:'',
-    barbeiro_id:'',
-    dataagendamento:'',
-    empresa_id:1,
-    user_id:1
-  };
-
-
   constructor(
     public dialogRef: MatDialogRef<CeAgendamentoComponent>,
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
     private BarbeiroService: BarbeiroService,
     private Token: TokenService,
-    private http: HttpClient
-  ) {}
+    private _http: HttpClient,
+    @Inject(MAT_DIALOG_DATA) data) {
+      if ( data.id != null ) {
+        let formID = {
+          id:data.id
+        }
+        this._http.post(API_URL + '/agendamentos/find/', formID).subscribe(
+          (agendamento: any[]) => {
+            this.agendamento = [];
+            for(let p of agendamento) {
+              let c = p.cliente;
+              
+              this.tempClienteNome = c.nome
+              this.agendamento.push(p);
+            }
+          }
+        )
+
+      }
+    }
 
   
 
   ngOnInit(): void {
-    this.getAgendamento();
+    //this.tempClienteNome = this.agendamento[0]['cliente'].nome;
+
     this.getClientes();
     this.getBarbeiros();
   }
@@ -108,7 +87,7 @@ export class CeAgendamentoComponent implements OnInit {
     this.AgendamentoService
         .getAgendamentos(value)
         .subscribe(
-            agendamentos => this.agendamento = agendamentos,
+            agendamento => this.agendamento = agendamento,
             error => this.handleError(error)
         );
   }
@@ -117,8 +96,12 @@ export class CeAgendamentoComponent implements OnInit {
     this.AgendamentoService
         .postAgendamento(value)
         .subscribe(
-            agendamentos => this.agendamento = agendamentos,
-            error => this.handleError(error)
+            agendamento => {
+              this.dialogRef.close(agendamento);
+            },
+            error => {
+              this.handleError(error)
+            }
         );
   }
 
@@ -147,28 +130,28 @@ export class CeAgendamentoComponent implements OnInit {
   }
   
   onSubmit() {
-    // Ao invés de enviar o objeto, enviamos apenas o id do cliente.
-    let c:any
-    if (this.form.cliente_id) {
-      c = this.form.cliente_id;
-    
-      if ( c['id'] > 0 ) {
-        this.form.cliente_id = c['id']
+    let tempData:any;
+
+    for(let d of Object.keys(this.data) ) {
+      if ( d === "year" ) {
+        tempData = this.data[d]
+      }
+      if ( d === "month" ) {
+        tempData += '-'+this.data[d]
+      }
+      if ( d === "day" ) {
+        tempData += '-'+this.data[d]
       }
     }
 
     if ( this.data && this.time ) {
-      this.form.dataagendamento = this.data + ' ' + this.pad(this.time.hour,2) + ':' + this.pad(this.time.minute,2);
+      this.agendamento[0].dataagendamento = new Date(tempData + ' ' + this.pad(this.time.hour,2) + ':' + this.pad(this.time.minute,2));
     } else {
-      this.form.dataagendamento = ''
+      this.agendamento[0].dataagendamento = null
     }
-
     this.error = null;
-    this.postAgendamento(this.form);
-
-    if (this.form.cliente_id) {
-      this.form.cliente_id = c['nome']
-    }
+    this.postAgendamento(this.agendamento);
+    this.dialogRef.close(this.agendamento);
   }
   
   cancelar() {
@@ -184,17 +167,16 @@ export class CeAgendamentoComponent implements OnInit {
     //<any>error
   }
 
-
-  selectEvent(item) {
+  selectEvent(item:any) {
+    let id_cliente = item.id
+    this.agendamento[0].cliente_id = id_cliente
     // do something with selected item
   }
  
-  onChangeSearch(val: string) {
+  clearedSearch(val: string) {
+    this.agendamento[0].cliente_id = 0;
+    console.log('Limpou')
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
-  }
-  
-  onFocused(e){
-    // do something when input is focused
   }
 }

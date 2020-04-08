@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {map, catchError} from 'rxjs/operators';
+import {GlobalConstants} from '../global-constants';
 
 export interface Agendamento {
   id: number,
@@ -14,7 +14,7 @@ export interface Agendamento {
   user_id?: number
 }
 
-const API_URL: string = 'http://localhost:8000/api';
+const API_URL:string = GlobalConstants.API_URL;
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,16 @@ export class AgendamentoService {
       );
   }
 
+  addLinha(agendamento:any) {
+    this.agendamentos.push(agendamento[0])
+  }
+
+  delLinha(agendamento:any) {
+    let i = this.agendamentos.findIndex((p) => p.id == agendamento);
+    if (i>=0)
+      this.agendamentos.splice(i,1);
+  }
+
 /*
      * explanation of observable response object
      * 
@@ -54,8 +64,6 @@ export class AgendamentoService {
      * }
      */
 
-    
-
   getAgendamentos(params?:any): Observable<Agendamento[]> {
     return this._http.post(API_URL + '/agendamentos/find/', params)
     .pipe(
@@ -72,12 +80,14 @@ export class AgendamentoService {
   postAgendamento(agendamento): Observable<Agendamento[]> {
     let tipoForm:string;
 
-    if ( agendamento.id == '' ) {
+    if ( agendamento[0].id == null ) {
       tipoForm = 'new'
     } else { 
       tipoForm = 'edit'
+      agendamento = agendamento[0]
+      //delete agendamento['cliente'];
     }
-    
+
     return this._http.post(API_URL + '/agendamento/'+tipoForm, agendamento)
     .pipe(
       map((response: any) => {
@@ -94,7 +104,6 @@ export class AgendamentoService {
   apagar(id: number) {
     this._http.delete(API_URL + '/agendamento/' + id).subscribe(
       (event) => {
-        console.log(this.agendamentos)
         let i = this.agendamentos.findIndex((p) => p.id == id);
         if (i>=0)
           this.agendamentos.splice(i,1);

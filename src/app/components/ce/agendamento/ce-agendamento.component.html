@@ -12,16 +12,16 @@
                     <label>Cliente</label>  
                     <div class="ng-autocomplete">
                         <ng-autocomplete
-                            name="this.form.cliente_id"
+                            name="tempClienteNome"
                             required
-                            [(ngModel)]="this.form.cliente_id"
+                            
+                            [(ngModel)]="tempClienteNome"
                             [data]="clientes"
                             [searchKeyword]="keyword"
                             placeHolder="Digite o nome do cliente"
                             (selected)='selectEvent($event)'
-                            (inputChanged)='onChangeSearch($event)'
-                            (inputFocused)='onFocused($event)'
-                            historyIdentifier="clientes"
+                            (closed)='selectEvent($event)'
+                            (inputCleared)='clearedSearch($event)'
                             [itemTemplate]="itemTemplate"
                             [notFoundTemplate]="notFoundTemplate">
                         </ng-autocomplete>
@@ -33,13 +33,14 @@
                         <ng-template #notFoundTemplate let-notFound>
                             <div [innerHTML]="notFound"></div>
                         </ng-template>
+                        
                     </div>
                 </div>
             </div>           
             <div class="row">
                 <div class="form-group">
                     <label>Barbeiros</label>
-                    <select class="custom-select" name="barbeiro_id" required [(ngModel)]="form.barbeiro_id">
+                    <select class="custom-select" name="barbeiro_id" required [(ngModel)]="agendamento[0].barbeiro_id">
                         <option *ngFor="let b of barbeiros" [value]="b.id">{{b.nome}}</option>
                     </select>
                 </div>
@@ -47,7 +48,7 @@
             <div class="row">
                 <div class="form-group">
                     <label>Serviços:</label>
-                    <select class="custom-select" name="descricao" required [(ngModel)]="form.descricao">
+                    <select class="custom-select" name="descricao" required [(ngModel)]="agendamento[0].descricao">
                         <option *ngFor="let s of servicos" [value]="s.nome">{{s.nome}}</option>
                     </select>
                 </div>
@@ -68,7 +69,7 @@
                 <div class="form-group">
                     <ngb-timepicker name="time" required [(ngModel)]="time" style="border-left:0;"></ngb-timepicker>
                     
-                    <!--<input class="form-control col-sm-10" name="dataagendamento" autocomplete="off" required [(ngModel)]="form.dataagendamento" mode="daytime" [dpDayPicker]="config" />-->
+                    <!--<input class="form-control col-sm-10" name="dataagendamento" autocomplete="off" required [(ngModel)]="agendamento[0].dataagendamento" mode="daytime" [dpDayPicker]="config" />-->
                 </div>
             </div>
             <div class="row" [innerHtml]="error" [hidden]="!error"></div>

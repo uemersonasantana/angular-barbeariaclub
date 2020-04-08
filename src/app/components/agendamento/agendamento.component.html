@@ -140,7 +140,7 @@
                     <td>{{ agendamento.cliente.nome }}</td>
                     <td>{{ agendamento.barbeiro.nome }}</td>
                     <td>
-                        <button type="button" class="btn btn-info btn-space">Editar</button>
+                        <button type="button" class="btn btn-info btn-space" (click)="openDialog(agendamento.id)">Editar</button>
                         <button type="button" class="btn btn-danger btn-space" (click)="apagarAgendamento(agendamento.id)">Apagar</button>
                     </td>
                 </tr>
