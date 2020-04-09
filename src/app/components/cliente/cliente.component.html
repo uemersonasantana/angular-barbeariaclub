@@ -1,0 +1,36 @@
+<div class="card card-center col-10">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" (click)="openModal()">Novo cliente</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-center col-10">
+    <div class="card-body">
+        <table class="table table-around">
+            <thead class="thead-light">
+                <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Fone</th>
+                <th scope="col">E-mail</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cliente of clientes">
+                    <td>{{ cliente.id }}</td>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.fone1 }}</td>
+                    <td>{{ cliente.email }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-space" (click)="openModal(cliente.id)">Editar</button>
+                        <button type="button" class="btn btn-danger btn-space" (click)="apagar(cliente.id)">Apagar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

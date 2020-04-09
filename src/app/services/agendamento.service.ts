@@ -46,23 +46,23 @@ export class AgendamentoService {
       this.agendamentos.splice(i,1);
   }
 
-/*
-     * explanation of observable response object
-     * 
-     * resData = {
-     *      data: <object>,
-     *      statusCode: <number>,
-     *      response: <jwres>,
-     *      error: <undefined>
-     * }
-     * 
-     * error = {
-     *      data: null,
-     *      statusCode: <number>,
-     *      response: <jwres>,
-     *      error: <jwres.error>
-     * }
-     */
+  /*
+    * explanation of observable response object
+    * 
+    * resData = {
+    *      data: <object>,
+    *      statusCode: <number>,
+    *      response: <jwres>,
+    *      error: <undefined>
+    * }
+    * 
+    * error = {
+    *      data: null,
+    *      statusCode: <number>,
+    *      response: <jwres>,
+    *      error: <jwres.error>
+    * }
+    */
 
   getAgendamentos(params?:any): Observable<Agendamento[]> {
     return this._http.post(API_URL + '/agendamentos/find/', params)

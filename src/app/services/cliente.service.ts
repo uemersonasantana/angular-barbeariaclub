@@ -4,14 +4,14 @@ import {Observable, throwError} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import {GlobalConstants} from '../global-constants';
 
+const API_URL:string = GlobalConstants.API_URL;
+
 export interface Cliente {
   id: number,
   nome: string,
   sobrenome: string,
   apelido: string,
 }
-
-const API_URL:string = GlobalConstants.API_URL;
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,16 @@ export class ClienteService {
     )
   }
 
+  addLinha(cliente:any) {
+    this.clientes.push(cliente)
+  }
+
+  delLinha(cliente:any) {
+    let i = this.clientes.findIndex((p) => p.id == cliente);
+    if (i>=0)
+      this.clientes.splice(i,1);
+  }
+
   getClientes(): Observable<Cliente[]> {
     return this._http.post(API_URL + '/clientes',null)
     .pipe(
@@ -47,4 +57,34 @@ export class ClienteService {
       );
   }
 
+  post(barbeiro: Cliente): Observable<Cliente[]> {
+    let tipoForm:string;
+
+    if ( barbeiro.id == null ) {
+      tipoForm = 'store'
+    } else { 
+      tipoForm = 'update'
+    }
+    
+    return this._http.post(API_URL + '/cliente/'+tipoForm, barbeiro)
+    .pipe(
+      map((response: any) => {
+        return response; 
+      }),
+      catchError(error => {
+        console.log(error)
+        return throwError(error);
+      })
+      
+      );
+  }
+
+  apagar(id:any) {
+    this._http.delete(API_URL + '/cliente/' + id).subscribe(
+      (event) => {
+        let i = this.clientes.findIndex((b) => b.id == id);
+        if (i>=0)
+          this.clientes.splice(i,1);
+      });
+  }
 }

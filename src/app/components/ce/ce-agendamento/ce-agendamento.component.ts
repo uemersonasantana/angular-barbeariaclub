@@ -5,8 +5,9 @@ import { Cliente, ClienteService } from '../../../services/cliente.service';
 import { Barbeiro, BarbeiroService } from '../../../services/barbeiro.service';
 import {NgbDateStruct,NgbTimeStruct,NgbDate,NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {GlobalConstants} from '../../../global-constants';
 
-const API_URL: string = 'http://localhost:8000/api';
+const API_URL:string = GlobalConstants.API_URL;
 
 /**
  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.

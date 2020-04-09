@@ -8,6 +8,11 @@
 .card {
     margin: 10px;
 }
+.card-center {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-top: 10px; /* Added */
+}
 .btn-space {
     margin-right: 5px;
 }

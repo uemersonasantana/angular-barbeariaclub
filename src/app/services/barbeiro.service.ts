@@ -8,10 +8,7 @@ export interface Barbeiro {
   id: string,
   nome: string,
   fone: string,
-  email: string,
-  
-  empresa_id?: number,
-  user_id?: number
+  email: string
 }
 
 const API_URL:string = GlobalConstants.API_URL;
@@ -33,6 +30,16 @@ export class BarbeiroService {
     )
   }
 
+  addLinha(barbeiro:any) {
+    this.barbeiros.push(barbeiro)
+  }
+
+  delLinha(barbeiro:any) {
+    let i = this.barbeiros.findIndex((p) => p.id == barbeiro);
+    if (i>=0)
+      this.barbeiros.splice(i,1);
+  }
+
   getBarbeiros(): Observable<Barbeiro[]> {
     return this._http.post(API_URL + '/barbeiros',null)
     .pipe(
@@ -44,5 +51,35 @@ export class BarbeiroService {
       })
       
       );
+  }
+
+  post(barbeiro: Barbeiro): Observable<Barbeiro[]> {
+    let tipoForm:string;
+
+    if ( barbeiro.id == null ) {
+      tipoForm = 'store'
+    } else { 
+      tipoForm = 'update'
+    }
+    
+    return this._http.post(API_URL + '/barbeiro/'+tipoForm, barbeiro)
+    .pipe(
+      map((response: any) => {
+        return response; 
+      }),
+      catchError(error => {
+        return throwError(error);
+      })
+      
+      );
+  }
+
+  apagar(id:any) {
+    this._http.delete(API_URL + '/barbeiro/' + id).subscribe(
+      (event) => {
+        let i = this.barbeiros.findIndex((b) => b.id == id);
+        if (i>=0)
+          this.barbeiros.splice(i,1);
+      });
   }
 }

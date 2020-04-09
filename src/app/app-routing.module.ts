@@ -7,7 +7,8 @@ import {ResponseResetComponent} from './components/password/response-reset/respo
 import {BeforeLoginService} from './services/before-login.service';
 import {AfterLoginService} from './services/after-login.service';
 import {AgendamentoComponent} from './components/agendamento/agendamento.component'
-import {CeAgendamentoComponent} from './components/ce/agendamento/ce-agendamento.component'
+import {BarbeiroComponent} from './components/barbeiro/barbeiro.component'
+import {ClienteComponent} from './components/cliente/cliente.component'
 
 
 const appRoutes: Routes = [
@@ -32,11 +33,21 @@ const appRoutes: Routes = [
     canActivate: [BeforeLoginService]
  }
 
- ,{
-    path: 'agendamentos',
-    component: AgendamentoComponent,
+  ,{
+      path: 'agendamentos',
+      component: AgendamentoComponent,
+      canActivate: [AfterLoginService]
+  }
+  ,{
+    path: 'barbeiros',
+    component: BarbeiroComponent,
     canActivate: [AfterLoginService]
- }
+  }
+  ,{
+    path: 'clientes',
+    component: ClienteComponent,
+    canActivate: [AfterLoginService]
+}
 ];
 
 /*

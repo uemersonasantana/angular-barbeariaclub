@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h5 class="modal-title">Novo</h5>
+    <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div class="modal-body">
+    <form #barbeiroForm=ngForm (ngSubmit)="onSubmit()">
+        <div class="container">                 
+            <div class="row">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" class="form-control" required name="nome" [(ngModel)]="cliente[0].nome">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>Sobrenome</label>
+                    <input type="text" class="form-control" required name="sobrenome" [(ngModel)]="cliente[0].sobrenome">
+                </div>
+            </div>
+            <div class="row" [innerHtml]="error" [hidden]="!error"></div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Salvar</button>
+    <button type="button" class="btn btn-light" (click)="cancelar()">Cancelar</button>
+</div>

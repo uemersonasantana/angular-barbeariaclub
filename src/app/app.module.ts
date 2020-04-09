@@ -12,8 +12,6 @@ import {AgendamentoService} from './services/agendamento.service';
 import {BarbeiroService} from './services/barbeiro.service';
 
 import {AppComponent} from './app.component';
-import {AgendamentoComponent} from './components/agendamento/agendamento.component';
-import {CeAgendamentoComponent} from './components/ce/agendamento/ce-agendamento.component';
 import {LoginComponent} from './components/login/login.component';
 import {SignupComponent} from './components/signup/signup.component';
 import {RequestResetComponent} from './components/password/request-reset/request-reset.component';
@@ -31,6 +29,14 @@ import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
+
+import {AgendamentoComponent} from './components/agendamento/agendamento.component';
+import {BarbeiroComponent} from './components/barbeiro/barbeiro.component';
+import {ClienteComponent} from './components/cliente/cliente.component';
+
+import {CeAgendamentoComponent} from './components/ce/ce-agendamento/ce-agendamento.component';
+import {CeBarbeiroComponent} from './components/ce/ce-barbeiro/ce-barbeiro.component';
+import {CeClienteComponent} from './components/ce/ce-cliente/ce-cliente.component';
 
 //import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 //import {OverlayModule} from '@angular/cdk/overlay';
@@ -64,7 +70,11 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     ResponseResetComponent,
     NavbarComponent,
     AgendamentoComponent,
-    CeAgendamentoComponent
+    BarbeiroComponent,
+    ClienteComponent,
+    CeAgendamentoComponent,
+    CeBarbeiroComponent,
+    CeClienteComponent,
   ],
   imports: [
     BrowserModule,

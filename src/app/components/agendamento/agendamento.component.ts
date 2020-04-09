@@ -4,7 +4,7 @@ import {Cliente, ClienteService} from '../../services/cliente.service';
 import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
 import {NgbDate, NgbCalendar, NgbDateParserFormatter,NgbDatepickerI18n, NgbDateStruct, NgbDateAdapter} from '@ng-bootstrap/ng-bootstrap';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {CeAgendamentoComponent} from '../../components/ce/agendamento/ce-agendamento.component'
+import {CeAgendamentoComponent} from '../ce/ce-agendamento/ce-agendamento.component'
 import 'rxjs/Rx';
 
 export interface PeriodicElement {
@@ -141,12 +141,14 @@ export class AgendamentoComponent {
   toDate: NgbDate | null;
 
   public form = {
-    cliente_id:'',
-    barbeiro_id:0,
-    tempo:0,
-    dataInicial: null,
-    dataFinal: null
- };
+      cliente_id:'',
+      barbeiro_id:0,
+      tempo:0,
+      dataInicial: null,
+      dataFinal: null
+  };
+
+  CurrentDate = new Date().toJSON().slice(0,19).replace(/-/g,'-').replace(/T/g,' ');
 
   constructor(
     private AgendamentoService: AgendamentoService,
@@ -158,6 +160,7 @@ export class AgendamentoComponent {
     //,private _i18n: I18n
   ) {}
 
+  
   ngOnInit() {
     this.agendamentos = this.AgendamentoService.agendamentos;
     this.barbeiros    = this.BarbeiroService.barbeiros;
