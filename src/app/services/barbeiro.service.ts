@@ -24,6 +24,13 @@ export class BarbeiroService {
   public barbeiros: Barbeiro[] = [];
 
   constructor(private _http: HttpClient) { 
+    this._http.post(API_URL + '/barbeiros', null).subscribe(
+      (barbeiros: any[]) => {
+        for(let b of barbeiros) {
+          this.barbeiros.push(b);
+        }
+      }
+    )
   }
 
   getBarbeiros(): Observable<Barbeiro[]> {

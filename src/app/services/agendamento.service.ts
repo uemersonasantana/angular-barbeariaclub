@@ -33,7 +33,7 @@ export class AgendamentoService {
             this.agendamentos.push(p);
           }
         }
-      );
+      )
   }
 
   addLinha(agendamento:any) {

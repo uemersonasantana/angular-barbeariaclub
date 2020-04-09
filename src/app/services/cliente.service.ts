@@ -25,16 +25,14 @@ export class ClienteService {
   constructor(
     private _http: HttpClient
   ) { 
-    
+    this._http.post(API_URL + '/clientes', null).subscribe(
+      (clientes: any[]) => {
+        for(let c of clientes) {
+          this.clientes.push(c);
+        }
+      }
+    )
   }
-  /*this.http.get(API_URL+"/clientes/"+val)
-  .subscribe((data: any[]) => {
-    this.clientes = [];
-    for(let c of data) {
-      this.clientes.push(c)
-      console.log(c);
-    }
-  });*/
 
   getClientes(): Observable<Cliente[]> {
     return this._http.post(API_URL + '/clientes',null)

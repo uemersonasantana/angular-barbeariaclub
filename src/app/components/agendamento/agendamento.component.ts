@@ -1,5 +1,4 @@
 import {Component, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Agendamento, AgendamentoService} from '../../services/agendamento.service';
 import {Cliente, ClienteService} from '../../services/cliente.service';
 import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
@@ -161,10 +160,8 @@ export class AgendamentoComponent {
 
   ngOnInit() {
     this.agendamentos = this.AgendamentoService.agendamentos;
-    
-    //this.getAgendamentos();
-    this.getClientes();
-    this.getBarbeiros();
+    this.barbeiros    = this.BarbeiroService.barbeiros;
+    this.clientes     = this.ClienteService.clientes;
  }
 
   getAgendamentos(value?:any) {
@@ -178,24 +175,6 @@ export class AgendamentoComponent {
               }
             },
             error => this.handleError(error)
-        );
- }
-
-  getClientes() {
-    this.ClienteService
-        .getClientes()
-        .subscribe(
-            clientes => this.clientes = clientes,
-            error => this.errorMessage = <any>error
-        );
- }
-
-  getBarbeiros() {
-    this.BarbeiroService
-        .getBarbeiros()
-        .subscribe(
-            barbeiros => this.barbeiros = barbeiros,
-            error => this.errorMessage = <any>error
         );
  }
 
