@@ -57,9 +57,10 @@
                 <div class="form-group">
                     <label>Data:</label>
                     <div class="input-group">
-                      <input class="form-control col-sm-5" required autocomplete="off" placeholder="Data" name="dp" [(ngModel)]="data" ngbDatepicker #d="ngbDatepicker">
+                      <input class="form-control col-sm-5" required autocomplete="off" placeholder="Data" name="dataagendamento" 
+                      [(ngModel)]="fromDate" [value]="formatter.format(fromDate)" ngbDatepicker #dataagendamento="ngbDatepicker">
                       <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                        <button class="btn btn-outline-secondary" (click)="dataagendamento.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
                       </div>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
             <div class="row">
                 <label>Hora:</label>
                 <div class="form-group">
-                    <ngb-timepicker name="time" required [(ngModel)]="time" style="border-left:0;"></ngb-timepicker>
+                    <ngb-timepicker name="fromTime" required [(ngModel)]="fromTime" style="border-left:0;"></ngb-timepicker>
                     
                     <!--<input class="form-control col-sm-10" name="dataagendamento" autocomplete="off" required [(ngModel)]="agendamento[0].dataagendamento" mode="daytime" [dpDayPicker]="config" />-->
                 </div>

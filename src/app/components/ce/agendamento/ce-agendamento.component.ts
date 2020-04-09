@@ -1,46 +1,74 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Agendamento, AgendamentoService } from '../../../services/agendamento.service';
 import { Cliente, ClienteService } from '../../../services/cliente.service';
 import { Barbeiro, BarbeiroService } from '../../../services/barbeiro.service';
-import { TokenService } from 'src/app/services/token.service';
-import {NgbDateStruct,NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct,NgbTimeStruct,NgbDate,NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 const API_URL: string = 'http://localhost:8000/api';
 
+/**
+ * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
+ */
+@Injectable()
+export class CustomDateParserFormatter extends NgbDateParserFormatter {
+  readonly DELIMITER = '-';
+  readonly DELIMITER_SHOW = '/';
+  readonly DELIMITER_TIME = ':';
+
+  parse(value: string): NgbDateStruct | null {
+    if (value) {
+      let date = value.split(this.DELIMITER);
+      return {
+        day : parseInt(date[2], 10),
+        month : parseInt(date[1], 10),
+        year : parseInt(date[0], 10)
+     };
+   }
+    return null;
+ }
+
+  format(date: NgbDateStruct | null): string {
+    return date ? date.day + this.DELIMITER_SHOW + date.month + this.DELIMITER_SHOW + date.year : '';
+ }
+}
+
 @Component({
   selector: 'app-ce-agendamento',
   templateUrl: './ce-agendamento.component.html',
-  styleUrls: ['./ce-agendamento.component.css']
+  styleUrls: ['./ce-agendamento.component.css'],
+  providers: [
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+  ]
 })
 export class CeAgendamentoComponent implements OnInit {
 
   error:any;
-  data:Date;
-  time:NgbTimeStruct;
+  fromDate:any;
+  fromTime:any;
+  tempClienteNome:string;
+
   keyword = 'nome';
   duedates:boolean = false;
   
-  tempClienteNome:string;
-
   agendamento: Agendamento[]  = [
-    {
-      id:null,
-      descricao:'',
-      cliente_id:null,
-      barbeiro_id:null,
-      dataagendamento:null
-    }
-];
+      {
+        id:null,
+        descricao:'',
+        cliente_id:null,
+        barbeiro_id:null,
+        dataagendamento:null
+      }
+  ];
+
   clientes: Cliente[];
   barbeiros: Barbeiro[];
-
-  title:any;
 
   config = {
     format: "DD/MM/YYYY HH:mm"
   };
+
   servicos: any[] = [
     { nome: 'BARBA' },
     { nome: 'CABELO' },
@@ -52,8 +80,8 @@ export class CeAgendamentoComponent implements OnInit {
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
     private BarbeiroService: BarbeiroService,
-    private Token: TokenService,
     private _http: HttpClient,
+    public formatter: NgbDateParserFormatter,
     @Inject(MAT_DIALOG_DATA) data) {
       if ( data.id != null ) {
         let formID = {
@@ -64,8 +92,10 @@ export class CeAgendamentoComponent implements OnInit {
             this.agendamento = [];
             for(let p of agendamento) {
               let c = p.cliente;
-              
               this.tempClienteNome = c.nome
+              this.fromDate = NgbDate.from(this.formatter.parse(p.dataagendamento))
+              this.fromTime = this.parseTime(p.dataagendamento.substr(11,5))
+
               this.agendamento.push(p);
             }
           }
@@ -74,13 +104,20 @@ export class CeAgendamentoComponent implements OnInit {
       }
     }
 
-  
-
   ngOnInit(): void {
-    //this.tempClienteNome = this.agendamento[0]['cliente'].nome;
-
     this.getClientes();
     this.getBarbeiros();
+  }
+
+  parseTime(value: string): NgbTimeStruct | null {
+      if (value) {
+        let time = value.split(':');
+        return {
+          hour : parseInt(time[0], 10)
+          ,minute : parseInt(time[1], 10)
+          ,second : 0
+      };
+    }
   }
 
   getAgendamento(value?:any) {
@@ -132,25 +169,25 @@ export class CeAgendamentoComponent implements OnInit {
   onSubmit() {
     let tempData:any;
 
-    for(let d of Object.keys(this.data) ) {
+    for(let d of Object.keys(this.fromDate) ) {
       if ( d === "year" ) {
-        tempData = this.data[d]
+        tempData = this.fromDate[d]
       }
       if ( d === "month" ) {
-        tempData += '-'+this.data[d]
+        tempData += '-'+this.fromDate[d]
       }
       if ( d === "day" ) {
-        tempData += '-'+this.data[d]
+        tempData += '-'+this.fromDate[d]
       }
     }
 
-    if ( this.data && this.time ) {
-      this.agendamento[0].dataagendamento = new Date(tempData + ' ' + this.pad(this.time.hour,2) + ':' + this.pad(this.time.minute,2));
+    if ( this.fromDate && this.fromTime ) {
+      this.agendamento[0].dataagendamento = new Date(tempData + ' ' + this.pad(this.fromTime.hour,2) + ':' + this.pad(this.fromTime.minute,2))
     } else {
       this.agendamento[0].dataagendamento = null
     }
     this.error = null;
-    this.postAgendamento(this.agendamento);
+    this.postAgendamento(this.agendamento[0]);
     this.dialogRef.close(this.agendamento);
   }
   
@@ -164,7 +201,6 @@ export class CeAgendamentoComponent implements OnInit {
       this.error += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
     }
     this.error += '<table>';
-    //<any>error
   }
 
   selectEvent(item:any) {
@@ -175,7 +211,6 @@ export class CeAgendamentoComponent implements OnInit {
  
   clearedSearch(val: string) {
     this.agendamento[0].cliente_id = 0;
-    console.log('Limpou')
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
   }

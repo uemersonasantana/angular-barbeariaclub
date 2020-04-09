@@ -1,10 +1,9 @@
-import {Component, OnInit, Injectable} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Agendamento, AgendamentoService} from '../../services/agendamento.service';
 import {Cliente, ClienteService} from '../../services/cliente.service';
 import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
 import {NgbDate, NgbCalendar, NgbDateParserFormatter,NgbDatepickerI18n, NgbDateStruct, NgbDateAdapter} from '@ng-bootstrap/ng-bootstrap';
-import {GlobalConstants} from '../../global-constants';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {CeAgendamentoComponent} from '../../components/ce/agendamento/ce-agendamento.component'
 import 'rxjs/Rx';
@@ -15,8 +14,6 @@ export interface PeriodicElement {
   weight: number;
   symbol: string;
 }
-
-const API_URL:string = GlobalConstants.API_URL;
 
 const I18N_VALUES = {
   'pt': {
@@ -124,10 +121,10 @@ export class AgendamentoComponent {
   barbeiros: Barbeiro[];
   
   errorMessage: string;
-  isLoading: boolean = true;
   config = {
     format: "DD/MM/YYYY"
- };
+  };
+
   tempo: any[] = [
     {id: 0, nome: 'Todos'},
     {id: 1, nome: 'Hoje'},
@@ -137,7 +134,6 @@ export class AgendamentoComponent {
     {id: 5, nome: 'Escolha o período'}
   ];
 
-  errorMsg: string;
   keyword = 'nome';
   duedates:boolean = false;
 
@@ -157,19 +153,11 @@ export class AgendamentoComponent {
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
     private BarbeiroService: BarbeiroService,
-    private http: HttpClient,
     private calendar: NgbCalendar, 
     public formatter: NgbDateParserFormatter,
-    public dialog: MatDialog,
-    private _i18n: I18n
-  ) {
-    //this.fromDate = calendar.getToday();
-    //this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
-    
- }
-
-  //@ViewChild('teste') contentElement: ElementRef;
-  
+    public dialog: MatDialog
+    //,private _i18n: I18n
+  ) {}
 
   ngOnInit() {
     this.agendamentos = this.AgendamentoService.agendamentos;
@@ -247,7 +235,6 @@ export class AgendamentoComponent {
       this.errorMessage += "<tr><td><div class='alert alert-danger'>"+error.error.errors[e][0]+"</div></td></tr>";
    }
     this.errorMessage += '<table>';
-    //<any>error
  }
 
   onBoxDueDates(value) {
@@ -258,19 +245,6 @@ export class AgendamentoComponent {
       this.form.dataFinal = null
       this.duedates = false
    }
- }
-
-  selectEvent(item) {
-    // do something with selected item
- }
- 
-  onChangeSearch(val: string) {
-    // fetch remote data from here
-    // And reassign the 'data' which is binded to 'data' property.
- }
-  
-  onFocused(e){
-    // do something when input is focused
  }
 
   onDateSelection(date: NgbDate) {
@@ -301,7 +275,7 @@ export class AgendamentoComponent {
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
  }
 
-  openDialog(id?:number) {
+  openModal(id?:number) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.data = {

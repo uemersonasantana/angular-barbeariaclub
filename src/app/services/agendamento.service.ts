@@ -80,11 +80,10 @@ export class AgendamentoService {
   postAgendamento(agendamento): Observable<Agendamento[]> {
     let tipoForm:string;
 
-    if ( agendamento[0].id == null ) {
+    if ( agendamento.id == null ) {
       tipoForm = 'new'
     } else { 
       tipoForm = 'edit'
-      agendamento = agendamento[0]
       //delete agendamento['cliente'];
     }
 
