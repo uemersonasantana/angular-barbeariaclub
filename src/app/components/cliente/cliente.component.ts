@@ -19,7 +19,7 @@ export class ClienteComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.clientes    = this.ClienteService.clientes;
+    this.clientes = this.ClienteService.clientes;
   }
 
   openModal(id?:number) {

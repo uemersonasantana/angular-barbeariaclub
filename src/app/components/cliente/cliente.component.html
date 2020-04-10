@@ -23,7 +23,7 @@
                 <tr *ngFor="let cliente of clientes">
                     <td>{{ cliente.id }}</td>
                     <td>{{ cliente.nome }}</td>
-                    <td>{{ cliente.fone1 }}</td>
+                    <td>{{ cliente.fone1 | mask: '(00) 00000-0000' }}</td>
                     <td>{{ cliente.email }}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-space" (click)="openModal(cliente.id)">Editar</button>

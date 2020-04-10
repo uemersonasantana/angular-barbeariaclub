@@ -1,0 +1,21 @@
+.tap-small-box, .tap-large-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.tap-small-box {
+    height: 100px;
+    width: 100px;
+}
+.form-group {
+    margin-right: 10px;
+}
+/*
+.tap-large-box {
+    height: 300px;
+    width: 300px;
+}*/

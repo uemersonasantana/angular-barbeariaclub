@@ -11,6 +11,20 @@ export interface Cliente {
   nome: string,
   sobrenome: string,
   apelido: string,
+  cpf: string,
+  fone1: string,
+  fone2: string,
+  email: string,
+}
+
+export interface Endereco {
+  id: number,
+  logradouro: string,
+  numero: number,
+  complemento: string,
+  bairro: string,
+  municipio_id: number,
+  cep: string
 }
 
 @Injectable({

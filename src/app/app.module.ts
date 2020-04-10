@@ -29,6 +29,12 @@ import {SnotifyModule, SnotifyService, ToastDefaults} from 'ng-snotify';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTabsModule} from '@angular/material/tabs';
+//import {MatFormFieldModule} from '@angular/material/form-field';
+
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {}
 
 import {AgendamentoComponent} from './components/agendamento/agendamento.component';
 import {BarbeiroComponent} from './components/barbeiro/barbeiro.component';
@@ -61,6 +67,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
   }
 }
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,6 +93,9 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     NgbModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatExpansionModule,
+    MatTabsModule,
+    NgxMaskModule.forRoot(options),
   ],
   providers: [
     AgendamentoService,
