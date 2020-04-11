@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {GlobalConstants} from '../global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
+  private baseUrl:string = GlobalConstants.API_URL;
+
   private iss = {
-    login: 'http://localhost:8000/api/login',
-    signup: 'http://localhost:8000/api/signup'
+    login: this.baseUrl+'/login',
+    signup: this.baseUrl+'/signup'
   };
 
-  constructor() { }
+  constructor(private _http: HttpClient ) { }
+  
+  
+  refreshToken() {
+    return this._http.post(`${this.baseUrl}/ufs`, null);
+  }
 
   handle(token) {
     this.set(token);

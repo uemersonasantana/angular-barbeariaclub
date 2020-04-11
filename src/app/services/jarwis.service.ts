@@ -21,8 +21,8 @@ export class JarwisService {
     return this.http.post(`${this.baseUrl}/login`, data)
   }
   
-  logout(data) {
-    return this.http.post(`${this.baseUrl}/logout`, data)
+  logout(): void {
+    this.http.post(`${this.baseUrl}/logout`, null).subscribe()
   }
 
   sendPasswordResetLink(data) {
@@ -32,5 +32,4 @@ export class JarwisService {
   changePassword(data) {
     return this.http.post(`${this.baseUrl}/resetPassword`, data)
   }
-
 }

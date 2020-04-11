@@ -11,7 +11,8 @@ import { TokenService } from '../../services/token.service';
 })
 export class NavbarComponent implements OnInit {
   public loggedIn: boolean;
-
+  collapsed = true;
+  
   constructor(
     private Auth: AuthService,
     private router: Router,
@@ -24,7 +25,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(event: MouseEvent) {
-    this.Jarwis.logout('').subscribe();
+    this.Jarwis.logout();
     event.preventDefault();
     this.Token.remove();
     this.Auth.changeAuthStatus(false);

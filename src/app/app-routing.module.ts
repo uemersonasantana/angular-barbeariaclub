@@ -10,59 +10,20 @@ import {AgendamentoComponent} from './components/agendamento/agendamento.compone
 import {BarbeiroComponent} from './components/barbeiro/barbeiro.component'
 import {ClienteComponent} from './components/cliente/cliente.component'
 
-
 const appRoutes: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [BeforeLoginService]
- },
-  {
-    path: 'signup',
-    component: SignupComponent,
-    canActivate: [BeforeLoginService]
- },
-  {
-    path: 'request-password-reset',
-    component: RequestResetComponent,
-    canActivate: [BeforeLoginService]
- },
-  {
-    path: 'response-password-reset',
-    component: ResponseResetComponent,
-    canActivate: [BeforeLoginService]
- }
-
-  ,{
-      path: 'agendamentos',
-      component: AgendamentoComponent,
-      canActivate: [AfterLoginService]
-  }
-  ,{
-    path: 'barbeiros',
-    component: BarbeiroComponent,
-    canActivate: [AfterLoginService]
-  }
-  ,{
-    path: 'clientes',
-    component: ClienteComponent,
-    canActivate: [AfterLoginService]
-}
+  {path: '', canActivate:[BeforeLoginService], children: [
+    { path : 'login', component: LoginComponent },
+    { path : 'signup', component : SignupComponent},
+    { path : 'request-password-reset', component: RequestResetComponent },
+    { path : 'response-password-reset', component: ResponseResetComponent }
+  ]}
+  ,
+  {path: '', canActivate:[AfterLoginService], children: [
+    { path : 'agendamentos', component: AgendamentoComponent },
+    { path : 'barbeiros', component : BarbeiroComponent},
+    { path : 'clientes', component: ClienteComponent }
+  ]}
 ];
-
-/*
-const appRoutesChildren: Routes = [
-  {
-  path:  'agendamentos',
-  component:  AgendamentoComponent,
-    children: [
-      {
-      path:  'ce',
-      component:  CeAgendamentoComponent
-      }
-    ]
-  }
-];*/
 
 @NgModule({
   imports: [

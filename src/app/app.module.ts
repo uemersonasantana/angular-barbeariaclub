@@ -43,29 +43,13 @@ import {ClienteComponent} from './components/cliente/cliente.component';
 import {CeAgendamentoComponent} from './components/ce/ce-agendamento/ce-agendamento.component';
 import {CeBarbeiroComponent} from './components/ce/ce-barbeiro/ce-barbeiro.component';
 import {CeClienteComponent} from './components/ce/ce-cliente/ce-cliente.component';
+import { AuthInterceptor } from './auth-interceptor';
 
 //import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 //import {OverlayModule} from '@angular/cdk/overlay';
 
 
 //registerLocaleData(localePt);
-
-@Injectable()
-
-export class HttpsRequestInterceptor implements HttpInterceptor {
-  constructor(private TokenService: TokenService) {}
-  
-  intercept(req: HttpRequest<any>,next: HttpHandler,): Observable<HttpEvent<any>> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer '+this.TokenService.get()
-    });
-
-    const cloneReq = req.clone({headers});
-
-    return next.handle(cloneReq);
-  }
-}
 
 
 @NgModule({
@@ -108,7 +92,7 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     [
       {
        provide: HTTP_INTERCEPTORS,
-       useClass: HttpsRequestInterceptor,
+       useClass: AuthInterceptor,
        multi: true,
      },
      ],
