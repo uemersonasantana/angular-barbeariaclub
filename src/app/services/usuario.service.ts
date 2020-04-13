@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http'
 import {Observable, throwError} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
+import {TokenService} from '../services/token.service';
 import {GlobalConstants} from '../global-constants';
 
 export interface Usuario {
@@ -20,14 +21,18 @@ export class UsuarioService {
 
   public usuarios: Usuario[] = [];
 
-  constructor(private _http: HttpClient) { 
-    this._http.post(API_URL + '/usuarios', null).subscribe(
-      (data: any[]) => {
-        for(let d of data) {
-          this.usuarios.push(d);
-        }
-      }
-    )
+  constructor(
+    private _http: HttpClient
+    ,private Token: TokenService,
+    ) { 
+    if (this.Token.loggedIn()) {
+      this._http.post(API_URL + '/usuarios', null).subscribe(
+        (data: any[]) => {
+          for(let d of data) {
+            this.usuarios.push(d);
+          }
+       })
+    }
   }
 
   me(): Observable<Usuario[]> {
