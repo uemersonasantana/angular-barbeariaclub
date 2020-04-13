@@ -45,5 +45,4 @@ export class BarbeiroComponent implements OnInit {
   apagar(id:number) {
     this.BarbeiroService.apagar(id);
   }
-
 }

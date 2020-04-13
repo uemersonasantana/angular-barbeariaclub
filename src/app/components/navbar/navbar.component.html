@@ -33,10 +33,10 @@
         <a class="nav-link" [routerLink]="['/agendamentos']" [routerLinkActive]="['active']" routerLink="agendamentos" *ngIf="loggedIn">Agendamentos</a>
       </li>
       <li class="nav-item" [routerLink]="['/barbeiros']" [routerLinkActive]="['active']">
-        <a class="nav-link" routerLink="barbeiros" *ngIf="loggedIn">Barbeiros</a>
+        <a class="nav-link" routerLink="/barbeiros" *ngIf="loggedIn">Barbeiros</a>
       </li>
       <li class="nav-item" [routerLink]="['/clientes']" [routerLinkActive]="['active']">
-        <a class="nav-link" routerLink="clientes" *ngIf="loggedIn">Clientes</a>
+        <a class="nav-link" routerLink="/clientes" *ngIf="loggedIn">Clientes</a>
       </li>
     </ul>
   </div>
@@ -50,11 +50,10 @@
       </li>
       <li *ngIf="loggedIn" class="nav-item" ngbDropdown display="dynamic" placement="bottom-right">
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
-          Conta
+          {{usuario[0].name}}
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
-          <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Meu Perfil</a>
-          <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Usuários</a>
+          <a ngbDropdownItem [routerLink]="['/usuarios']" [routerLinkActive]="['active']" routerLink="/usuarios">Usuários</a>
           <a ngbDropdownItem href="#" (click)="logout($event)">Sair</a>
         </div>
       </li>

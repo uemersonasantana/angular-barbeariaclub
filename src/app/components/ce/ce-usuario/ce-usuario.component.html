@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h5 class="modal-title">Novo</h5>
+    <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div class="modal-body">
+    <form #barbeiroForm=ngForm (ngSubmit)="onSubmit()">
+        <div class="container">                 
+            <div class="row">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" class="form-control" required name="name" [(ngModel)]="usuario[0].name">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" class="form-control" required name="email" [(ngModel)]="usuario[0].email">
+                </div>
+            </div>
+            <div class="row" *ngIf="usuario[0].id">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="editPassword" name="editPassword" [(ngModel)]="form.editPassword" [value]="true">
+                    <label class="custom-control-label" for="editPassword">Mudar senha</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="form.editPassword">
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" class="form-control" required name="password" [(ngModel)]="usuario[0].password">
+                </div>
+            </div>
+            <div class="row" *ngIf="form.editPassword">
+                <div class="form-group">
+                    <label>Confirmação de Senha</label>
+                    <input type="password" class="form-control" required name="password_confirmation" [(ngModel)]="form.password_confirmation">
+                </div>
+            </div>
+            <div class="row" [innerHtml]="error" [hidden]="!error"></div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-info btn-space" (click)="onSubmit()">Salvar</button>
+    <button type="button" class="btn btn-light" (click)="cancelar()">Cancelar</button>
+</div>

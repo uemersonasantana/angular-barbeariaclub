@@ -44,6 +44,8 @@ import {CeAgendamentoComponent} from './components/ce/ce-agendamento/ce-agendame
 import {CeBarbeiroComponent} from './components/ce/ce-barbeiro/ce-barbeiro.component';
 import {CeClienteComponent} from './components/ce/ce-cliente/ce-cliente.component';
 import { AuthInterceptor } from './auth-interceptor';
+import { UsuarioComponent } from './components/usuario/usuario.component';
+import { CeUsuarioComponent } from './components/ce/ce-usuario/ce-usuario.component';
 
 //import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 //import {OverlayModule} from '@angular/cdk/overlay';
@@ -66,6 +68,8 @@ import { AuthInterceptor } from './auth-interceptor';
     CeAgendamentoComponent,
     CeBarbeiroComponent,
     CeClienteComponent,
+    UsuarioComponent,
+    CeUsuarioComponent,
   ],
   imports: [
     BrowserModule,
