@@ -19,8 +19,10 @@ export class BarbeiroComponent implements OnInit {
 
   ngOnInit(): void {
     this.barbeiros    = this.BarbeiroService.barbeiros;
+  }
 
-    console.log(this.barbeiros)
+  ngOnDestroy() {
+    this.barbeiros = null;
   }
 
   openModal(id?:number) {

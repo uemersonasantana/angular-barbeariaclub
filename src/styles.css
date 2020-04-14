@@ -5,6 +5,10 @@
 .ng-valid:not(form){
     border-left:5px solid green;
 }
+.bg-gray {
+    background-color: #ebebeb;
+    
+}
 .card {
     margin: 10px;
 }
@@ -17,7 +21,6 @@
     margin-right: 5px;
 }
 .CustomCol {
-    border:1px solid black;
     padding: 10px;
 }
 .texto-branco {

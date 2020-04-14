@@ -189,7 +189,6 @@ export class CeAgendamentoComponent implements OnInit {
     }
     this.error = null;
     this.postAgendamento(this.agendamento[0]);
-    this.dialogRef.close(this.agendamento);
   }
   
   cancelar() {

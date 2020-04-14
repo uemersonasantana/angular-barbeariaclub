@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
+import { SnotifyService } from 'ng-snotify';
 import {GlobalConstants} from '../global-constants';
 
 export interface Agendamento {
@@ -22,10 +23,12 @@ const API_URL:string = GlobalConstants.API_URL;
 export class AgendamentoService {
 
   public agendamentos: Agendamento[] = [];
+  public NotifyAgendamentos: Agendamento[] = [];
   public res:any;
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private Notfiy:SnotifyService
     ) {
       this._http.post(API_URL + '/agendamentos/find/', null).subscribe(
         (agendamentos: any[]) => {
@@ -34,6 +37,39 @@ export class AgendamentoService {
           }
         }
       )
+      this.getNotifyAgendamentos()
+  }
+
+  getNotifyAgendamentos(): void {
+    let tempForm = {
+      tempo:6
+    }
+
+    this._http.post(API_URL + '/agendamentos/find/', tempForm).subscribe(
+      (data: any[]) => {
+        for(let d of data) {
+          //console.log(d.cliente.sobrenome.length)
+          let tresPontos:string = ''
+          let Fone2:string = ''
+
+          if ( d.cliente.sobrenome.length > 6 ) {
+            tresPontos = '...'
+          }
+          if (Fone2) {
+            Fone2 = ' | '+'Fone 2: '+d.cliente.fone2
+          }
+          
+          this.Notfiy.confirm('Fone 1: '+d.cliente.fone1 + Fone2, d.cliente.nome + ' ' + d.cliente.sobrenome.substr(0,6) + tresPontos, {
+            showProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            buttons: [
+              {text: 'Fechar', action: (toast) => {this.Notfiy.remove(toast.id); }, bold: false},
+            ]
+          });
+        }
+      }
+    )
   }
 
   addLinha(agendamento:any) {

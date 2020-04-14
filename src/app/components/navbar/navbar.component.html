@@ -49,8 +49,8 @@
         </div>
       </li>
       <li *ngIf="loggedIn" class="nav-item" ngbDropdown display="dynamic" placement="bottom-right">
-        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
-          {{usuario[0].name}}
+        <a class="nav-link" style="color:white;cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
+          Configurações
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
           <a ngbDropdownItem [routerLink]="['/usuarios']" [routerLinkActive]="['active']" routerLink="/usuarios">Usuários</a>

@@ -20,6 +20,7 @@ const API_URL:string = GlobalConstants.API_URL;
 export class UsuarioService {
 
   public usuarios: Usuario[] = [];
+  public userLogged: Usuario[] = [];
 
   constructor(
     private _http: HttpClient
@@ -32,20 +33,16 @@ export class UsuarioService {
             this.usuarios.push(d);
           }
        })
+       this.me()
+      }
     }
-  }
-
-  me(): Observable<Usuario[]> {
-    return this._http.get(API_URL + '/me')
-    .pipe(
-      map((response: any) => {
-        return response; 
-      }),
-      catchError(error => {
-        return throwError(error);
+  
+  me(): void { 
+    this.userLogged = []
+    this._http.get(API_URL + '/me').subscribe(
+      (data: any[]) => {
+        this.userLogged.push(data['user'])
       })
-      
-      );
   }
 
   addLinha(usuario:any) {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { JarwisService } from '../../services/jarwis.service';
 import { TokenService } from '../../services/token.service';
 import { Router } from '@angular/router';
+import {UsuarioService} from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
     private Jarwis: JarwisService,
     private Token: TokenService,
     private router: Router,
-    private Auth: AuthService
+    private Auth: AuthService,
+    private UsuarioService: UsuarioService
   ) { }
 
   onSubmit() {
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
   handleResponse(data) {
     this.Token.handle(data.access_token);
     this.Auth.changeAuthStatus(true);
+    this.UsuarioService.me()
     this.router.navigateByUrl('/agendamentos');
   }
 

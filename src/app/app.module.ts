@@ -93,6 +93,7 @@ import { CeUsuarioComponent } from './components/ce/ce-usuario/ce-usuario.compon
     AuthService, 
     AfterLoginService, 
     BeforeLoginService,
+    NavbarComponent,
     [
       {
        provide: HTTP_INTERCEPTORS,

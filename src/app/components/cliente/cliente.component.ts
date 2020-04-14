@@ -21,6 +21,9 @@ export class ClienteComponent implements OnInit {
   ngOnInit(): void {
     this.clientes = this.ClienteService.clientes;
   }
+  ngOnDestroy() {
+    this.clientes = null;
+  }
 
   openModal(id?:number) {
     const dialogConfig = new MatDialogConfig();

@@ -116,6 +116,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 export class AgendamentoComponent {
   
   agendamentos: Agendamento[];
+  NotifyAgendamentos: Agendamento[];
   clientes: Cliente[];
   barbeiros: Barbeiro[];
   
@@ -165,9 +166,17 @@ export class AgendamentoComponent {
     this.agendamentos = this.AgendamentoService.agendamentos;
     this.barbeiros    = this.BarbeiroService.barbeiros;
     this.clientes     = this.ClienteService.clientes;
- }
+  }
+
+  ngOnDestroy() {
+    this.agendamentos = null;
+    this.barbeiros    = null;
+    this.clientes     = null;
+  }
+ 
 
   getAgendamentos(value?:any) {
+    console.log(value)
     this.AgendamentoService
         .getAgendamentos(value)
         .subscribe(
@@ -279,5 +288,4 @@ export class AgendamentoComponent {
  apagarAgendamento(id:number) {
     this.AgendamentoService.apagar(id);
   }
-
 }

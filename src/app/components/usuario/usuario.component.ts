@@ -20,6 +20,9 @@ export class UsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.usuarios    = this.UsuarioService.usuarios;
   }
+  ngOnDestroy() {
+    this.usuarios = null;
+  }
 
   openModal(id?:number) {
     const dialogConfig = new MatDialogConfig();
