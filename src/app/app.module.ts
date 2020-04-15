@@ -31,7 +31,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 //import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatCardModule} from '@angular/material/card';
 
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {}
@@ -83,6 +88,11 @@ import { CeUsuarioComponent } from './components/ce/ce-usuario/ce-usuario.compon
     MatDialogModule,
     MatExpansionModule,
     MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
     NgxMaskModule.forRoot(options),
   ],
   providers: [

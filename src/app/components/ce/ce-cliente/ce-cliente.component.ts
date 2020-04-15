@@ -49,6 +49,8 @@ export class CeClienteComponent implements OnInit {
   error:any;
   panelOpenState = false;
 
+  modo:string;
+
   constructor(
     public dialogRef: MatDialogRef<CeClienteComponent>,
     private ClienteService: ClienteService
@@ -57,12 +59,16 @@ export class CeClienteComponent implements OnInit {
     ,private _http: HttpClient
     ,@Inject(MAT_DIALOG_DATA) data) {
       if ( data.id != null ) {
+        this.modo = 'Editar'
+        
         let formID = {
           id:data.id
         }
+        
         this._http.post(API_URL + '/cliente/edit/', formID).subscribe(
           (cliente: Cliente[]) => {
             this.cliente  = cliente
+            
             if ( cliente[0]['endereco_id']) {
               this.endereco = [
                 {
@@ -84,12 +90,13 @@ export class CeClienteComponent implements OnInit {
           }
         )
 
+      } else {
+        this.modo = 'Novo'
       }
     }
 
   ngOnInit(): void {
     this.ufs        = this.UfService.ufs;
-    
   }
 
   selectMunicipio(uf_id:number) {
@@ -128,6 +135,8 @@ export class CeClienteComponent implements OnInit {
     this.cliente[0]['cep'] = this.endereco[0]['cep']
     this.cliente[0]['uf_id'] = this.uf
     
+    this.cliente[0]['modo'] = this.modo
+
     this.post(this.cliente[0]);
   }
   

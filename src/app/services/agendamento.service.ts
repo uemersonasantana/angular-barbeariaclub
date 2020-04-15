@@ -30,13 +30,6 @@ export class AgendamentoService {
     private _http: HttpClient,
     private Notfiy:SnotifyService
     ) {
-      this._http.post(API_URL + '/agendamentos/find/', null).subscribe(
-        (agendamentos: any[]) => {
-          for(let p of agendamentos) {
-            this.agendamentos.push(p);
-          }
-        }
-      )
       this.getNotifyAgendamentos()
   }
 
@@ -49,17 +42,23 @@ export class AgendamentoService {
       (data: any[]) => {
         for(let d of data) {
           //console.log(d.cliente.sobrenome.length)
-          let tresPontos:string = ''
+          let sobrenome:string = ''
           let Fone2:string = ''
 
-          if ( d.cliente.sobrenome.length > 6 ) {
-            tresPontos = '...'
+          if ( d.cliente.sobrenome ) {
+            sobrenome = d.cliente.sobrenome.substr(0,6)
+            if ( d.cliente.sobrenome.length > 6 ) {
+              sobrenome += '...'
+            } 
+          } else {
+            sobrenome = ''
           }
+
           if (Fone2) {
             Fone2 = ' | '+'Fone 2: '+d.cliente.fone2
           }
           
-          this.Notfiy.confirm('Fone 1: '+d.cliente.fone1 + Fone2, d.cliente.nome + ' ' + d.cliente.sobrenome.substr(0,6) + tresPontos, {
+          this.Notfiy.confirm('Fone 1: '+d.cliente.fone1 + Fone2, d.cliente.nome + ' ' + sobrenome, {
             showProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -70,16 +69,6 @@ export class AgendamentoService {
         }
       }
     )
-  }
-
-  addLinha(agendamento:any) {
-    this.agendamentos.push(agendamento[0])
-  }
-
-  delLinha(agendamento:any) {
-    let i = this.agendamentos.findIndex((p) => p.id == agendamento);
-    if (i>=0)
-      this.agendamentos.splice(i,1);
   }
 
   /*
@@ -137,11 +126,6 @@ export class AgendamentoService {
   }
   
   apagar(id: number) {
-    this._http.delete(API_URL + '/agendamento/' + id).subscribe(
-      (event) => {
-        let i = this.agendamentos.findIndex((p) => p.id == id);
-        if (i>=0)
-          this.agendamentos.splice(i,1);
-      });
+    this._http.delete(API_URL + '/agendamento/' + id).subscribe()
   }
 }

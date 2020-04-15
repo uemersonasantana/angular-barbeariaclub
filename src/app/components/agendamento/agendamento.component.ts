@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component, Injectable, ViewChild} from '@angular/core';
 import {Agendamento, AgendamentoService} from '../../services/agendamento.service';
 import {Cliente, ClienteService} from '../../services/cliente.service';
 import {Barbeiro, BarbeiroService} from '../../services/barbeiro.service';
@@ -6,6 +6,10 @@ import {NgbDate, NgbCalendar, NgbDateParserFormatter,NgbDatepickerI18n, NgbDateS
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {CeAgendamentoComponent} from '../ce/ce-agendamento/ce-agendamento.component'
 import 'rxjs/Rx';
+
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 export interface PeriodicElement {
   name: string;
@@ -151,6 +155,12 @@ export class AgendamentoComponent {
 
   CurrentDate = new Date().toJSON().slice(0,19).replace(/-/g,'-').replace(/T/g,' ');
 
+  displayedColumns: string[] = ['data', 'hora', 'servico', 'cliente', 'barbearia', 'actions'];
+  dataSource: MatTableDataSource<Agendamento>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  isLoading = true;
+
   constructor(
     private AgendamentoService: AgendamentoService,
     private ClienteService: ClienteService,
@@ -160,12 +170,23 @@ export class AgendamentoComponent {
     public dialog: MatDialog
     //,private _i18n: I18n
   ) {}
-
   
   ngOnInit() {
-    this.agendamentos = this.AgendamentoService.agendamentos;
-    this.barbeiros    = this.BarbeiroService.barbeiros;
-    this.clientes     = this.ClienteService.clientes;
+    this.BarbeiroService.getBarbeiros().subscribe( data => { this.barbeiros = data })
+    this.ClienteService.getClientes().subscribe( data => { this.clientes = data })
+
+    this.AgendamentoService.getAgendamentos()
+       .subscribe(
+        data => {
+          this.isLoading = false;
+          this.agendamentos = data;
+          // Assign the data to the data source for the table to render
+          this.dataSource =  new MatTableDataSource(this.agendamentos)
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 
+        error => this.isLoading = false
+    )
   }
 
   ngOnDestroy() {
@@ -173,10 +194,41 @@ export class AgendamentoComponent {
     this.barbeiros    = null;
     this.clientes     = null;
   }
- 
+
+  addRowInTable(data){
+    this.agendamentos.push(data[0]);
+    // Assign the data to the data source for the table to render
+    this.dataSource =  new MatTableDataSource(this.agendamentos)
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    
+  }
+  updateRowInTable(data) {
+    let i = this.agendamentos.findIndex((d) => d.id == data[0].id);
+    if (i>=0) {
+      this.agendamentos[i] = data[0] 
+    }
+    this.dataSource._updateChangeSubscription()
+  }
+  delRowInTable(id) {
+    let i = this.agendamentos.findIndex((d) => d.id == id);
+    if (i>=0) {
+      this.agendamentos.splice(i,1)
+    }
+    this.dataSource._updateChangeSubscription()
+    this.AgendamentoService.apagar(id);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   getAgendamentos(value?:any) {
-    console.log(value)
     this.AgendamentoService
         .getAgendamentos(value)
         .subscribe(
@@ -185,9 +237,13 @@ export class AgendamentoComponent {
               for(let t of agendamentos) { 
                 this.agendamentos.push(t);
               }
+              // Assign the data to the data source for the table to render
+              this.dataSource =  new MatTableDataSource(this.agendamentos)
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
             },
             error => this.handleError(error)
-        );
+        )
  }
 
   onSubmit() {
@@ -214,7 +270,7 @@ export class AgendamentoComponent {
 
     this.errorMessage = null;
     this.getAgendamentos(this.form);
-
+    
     if (this.form.cliente_id) {
       this.form.cliente_id = c['nome']
    }
@@ -278,8 +334,11 @@ export class AgendamentoComponent {
     dialogRef.afterClosed().subscribe(
       (result) => {
         if (result) {
-          this.AgendamentoService.delLinha(result[0].id);
-          this.AgendamentoService.addLinha(result);
+          if ( result[0].modo == 'editar' ) {
+            this.updateRowInTable(result);
+          } else {
+            this.addRowInTable(result);
+          }
        }
      }
     );

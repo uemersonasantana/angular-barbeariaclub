@@ -18,27 +18,7 @@ const API_URL:string = GlobalConstants.API_URL;
 })
 export class BarbeiroService {
 
-  public barbeiros: Barbeiro[] = [];
-
-  constructor(private _http: HttpClient) { 
-    this._http.post(API_URL + '/barbeiros', null).subscribe(
-      (barbeiros: any[]) => {
-        for(let b of barbeiros) {
-          this.barbeiros.push(b);
-        }
-      }
-    )
-  }
-
-  addLinha(barbeiro:any) {
-    this.barbeiros.push(barbeiro)
-  }
-
-  delLinha(barbeiro:any) {
-    let i = this.barbeiros.findIndex((p) => p.id == barbeiro);
-    if (i>=0)
-      this.barbeiros.splice(i,1);
-  }
+  constructor(private _http: HttpClient) {}
 
   getBarbeiros(): Observable<Barbeiro[]> {
     return this._http.post(API_URL + '/barbeiros',null)
@@ -74,12 +54,7 @@ export class BarbeiroService {
       );
   }
 
-  apagar(id:any) {
-    this._http.delete(API_URL + '/barbeiro/' + id).subscribe(
-      (event) => {
-        let i = this.barbeiros.findIndex((b) => b.id == id);
-        if (i>=0)
-          this.barbeiros.splice(i,1);
-      });
+  apagar(id:number) {
+    this._http.delete(API_URL + '/barbeiro/' + id).subscribe()
   }
 }

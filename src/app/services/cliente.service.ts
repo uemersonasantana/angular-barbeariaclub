@@ -36,27 +36,7 @@ export class ClienteService {
   public clientes: Cliente[] = [];
   public res:any;
 
-  constructor(
-    private _http: HttpClient
-  ) { 
-    this._http.post(API_URL + '/clientes', null).subscribe(
-      (clientes: any[]) => {
-        for(let c of clientes) {
-          this.clientes.push(c);
-        }
-      }
-    )
-  }
-
-  addLinha(cliente:any) {
-    this.clientes.push(cliente)
-  }
-
-  delLinha(cliente:any) {
-    let i = this.clientes.findIndex((p) => p.id == cliente);
-    if (i>=0)
-      this.clientes.splice(i,1);
-  }
+  constructor(private _http: HttpClient) {}
 
   getClientes(): Observable<Cliente[]> {
     return this._http.post(API_URL + '/clientes',null)
@@ -94,11 +74,6 @@ export class ClienteService {
   }
 
   apagar(id:any) {
-    this._http.delete(API_URL + '/cliente/' + id).subscribe(
-      (event) => {
-        let i = this.clientes.findIndex((b) => b.id == id);
-        if (i>=0)
-          this.clientes.splice(i,1);
-      });
+    this._http.delete(API_URL + '/cliente/' + id).subscribe()
   }
 }

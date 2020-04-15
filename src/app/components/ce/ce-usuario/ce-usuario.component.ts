@@ -28,6 +28,7 @@ export class CeUsuarioComponent implements OnInit {
   };
 
   error:any;
+  modo:any;
 
   constructor(
     public dialogRef: MatDialogRef<CeUsuarioComponent>,
@@ -35,6 +36,8 @@ export class CeUsuarioComponent implements OnInit {
     private _http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data) {
       if ( data.id != null ) {
+        this.modo = 'Editar'
+
         let formID = {
           id:data.id
         }
@@ -43,8 +46,8 @@ export class CeUsuarioComponent implements OnInit {
             this.usuario = usuario
           }
         )
-
       } else {
+        this.modo = 'Novo'
         this.form.editPassword = true
       }
     }

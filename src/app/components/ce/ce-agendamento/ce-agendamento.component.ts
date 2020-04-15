@@ -74,7 +74,9 @@ export class CeAgendamentoComponent implements OnInit {
     { nome: 'BARBA' },
     { nome: 'CABELO' },
     { nome: 'BARBA+CABELO' }
-  ];
+  ]
+
+  modo:any;
 
   constructor(
     public dialogRef: MatDialogRef<CeAgendamentoComponent>,
@@ -85,6 +87,8 @@ export class CeAgendamentoComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     @Inject(MAT_DIALOG_DATA) data) {
       if ( data.id != null ) {
+        this.modo = 'Editar'
+
         let formID = {
           id:data.id
         }
@@ -101,7 +105,8 @@ export class CeAgendamentoComponent implements OnInit {
             }
           }
         )
-
+      } else {
+        this.modo = 'Novo'
       }
     }
 

@@ -23,6 +23,7 @@ export class CeBarbeiroComponent implements OnInit {
   ];
 
   error:any;
+  modo:any;
 
   constructor(
     public dialogRef: MatDialogRef<CeBarbeiroComponent>,
@@ -30,6 +31,8 @@ export class CeBarbeiroComponent implements OnInit {
     private _http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data) {
       if ( data.id != null ) {
+        this.modo = 'Editar'
+
         let formID = {
           id:data.id
         }
@@ -38,7 +41,8 @@ export class CeBarbeiroComponent implements OnInit {
             this.barbeiro = barbeiro
           }
         )
-
+      } else {
+        this.modo = 'Novo'
       }
     }
 
