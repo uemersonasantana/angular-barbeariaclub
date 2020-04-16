@@ -77,6 +77,7 @@ export class CeAgendamentoComponent implements OnInit {
   ]
 
   modo:any;
+  isLoadingResult:boolean;
 
   constructor(
     public dialogRef: MatDialogRef<CeAgendamentoComponent>,
@@ -208,15 +209,28 @@ export class CeAgendamentoComponent implements OnInit {
     this.error += '<table>';
   }
 
-  selectEvent(item:any) {
-    let id_cliente = item.id
-    this.agendamento[0].cliente_id = id_cliente
-    // do something with selected item
+  getServerResponseClientes(event) {
+    this.isLoadingResult = true;
+    this.ClienteService.getBuscaClientes(event).subscribe(
+      data => { 
+        if (data[0]['nome'] == undefined) {
+          this.clientes = []
+        } else {
+          this.clientes = data
+        }
+        this.isLoadingResult = false;
+      })
   }
- 
-  clearedSearch(val: string) {
+
+  searchClearedClientes() {
     this.agendamento[0].cliente_id = 0;
-    // fetch remote data from here
-    // And reassign the 'data' which is binded to 'data' property.
+    this.clientes = [];
+  }
+
+  selectEvent(item) {
+    if (item) {
+      let id_cliente = item.id
+      this.agendamento[0].cliente_id = id_cliente
+    }
   }
 }

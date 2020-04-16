@@ -38,6 +38,18 @@ export class ClienteService {
 
   constructor(private _http: HttpClient) {}
 
+  getBuscaClientes(q): Observable<Cliente[]> {
+    return this._http.get(API_URL + '/clientes/buscar/'+q)
+    .pipe(
+        map((response: any) => {
+          return response; 
+        }),
+        catchError(error => {
+          return throwError(error);
+        })
+      )
+  }
+
   getClientes(): Observable<Cliente[]> {
     return this._http.post(API_URL + '/clientes',null)
     .pipe(

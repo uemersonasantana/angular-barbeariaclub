@@ -14,14 +14,16 @@
                         <ng-autocomplete
                             name="tempClienteNome"
                             required
-                            
                             [(ngModel)]="tempClienteNome"
                             [data]="clientes"
                             [searchKeyword]="keyword"
                             placeHolder="Digite o nome do cliente"
                             (selected)='selectEvent($event)'
                             (closed)='selectEvent($event)'
-                            (inputCleared)='clearedSearch($event)'
+                            minQueryLength="2"
+                            (inputChanged)='getServerResponseClientes($event)' 
+                            (inputCleared)='searchClearedClientes()'
+                            [isLoading]="isLoadingResult" 
                             [itemTemplate]="itemTemplate"
                             [notFoundTemplate]="notFoundTemplate">
                         </ng-autocomplete>
@@ -30,10 +32,7 @@
                             <a [innerHTML]="item.nome"></a>
                         </ng-template>
                         
-                        <ng-template #notFoundTemplate let-notFound>
-                            <div [innerHTML]="notFound"></div>
-                        </ng-template>
-                        
+                        <ng-template #notFoundTemplate let-notFound><div style="color:black;padding:10px;">Cliente não encontrado.</div></ng-template>
                     </div>
                 </div>
             </div>           

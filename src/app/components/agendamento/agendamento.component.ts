@@ -8,7 +8,7 @@ import {CeAgendamentoComponent} from '../ce/ce-agendamento/ce-agendamento.compon
 import 'rxjs/Rx';
 
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, MatSortable} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
 export interface PeriodicElement {
@@ -155,11 +155,14 @@ export class AgendamentoComponent {
 
   CurrentDate = new Date().toJSON().slice(0,19).replace(/-/g,'-').replace(/T/g,' ');
 
-  displayedColumns: string[] = ['data', 'hora', 'servico', 'cliente', 'barbearia', 'actions'];
+  displayedColumns: string[] = ['id', 'data', 'hora', 'servico', 'cliente', 'barbearia', 'actions'];
   dataSource: MatTableDataSource<Agendamento>;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  //@Input() sorting: MatSortable;
   isLoading = true;
+
+  isLoadingResult: boolean;
 
   constructor(
     private AgendamentoService: AgendamentoService,
@@ -173,8 +176,7 @@ export class AgendamentoComponent {
   
   ngOnInit() {
     this.BarbeiroService.getBarbeiros().subscribe( data => { this.barbeiros = data })
-    this.ClienteService.getClientes().subscribe( data => { this.clientes = data })
-
+    
     this.AgendamentoService.getAgendamentos()
        .subscribe(
         data => {
@@ -183,6 +185,7 @@ export class AgendamentoComponent {
           // Assign the data to the data source for the table to render
           this.dataSource =  new MatTableDataSource(this.agendamentos)
           this.dataSource.paginator = this.paginator;
+          this.sort.sort(({ id: 'id', start: 'desc'}) as MatSortable)
           this.dataSource.sort = this.sort;
         }, 
         error => this.isLoading = false
@@ -195,13 +198,26 @@ export class AgendamentoComponent {
     this.clientes     = null;
   }
 
+  getServerResponseClientes(event) {
+    this.isLoadingResult = true;
+    this.ClienteService.getBuscaClientes(event).subscribe(
+      data => { 
+        if (data[0]['nome'] == undefined) {
+          this.clientes = []
+        } else {
+          this.clientes = data
+        }
+        this.isLoadingResult = false;
+      })
+  }
+
+  searchClearedClientes() {
+    this.clientes = [];
+  }
+
   addRowInTable(data){
     this.agendamentos.push(data[0]);
-    // Assign the data to the data source for the table to render
-    this.dataSource =  new MatTableDataSource(this.agendamentos)
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    
+    this.dataSource._updateChangeSubscription()
   }
   updateRowInTable(data) {
     let i = this.agendamentos.findIndex((d) => d.id == data[0].id);

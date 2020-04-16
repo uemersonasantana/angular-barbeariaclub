@@ -16,7 +16,10 @@
                             [data]="clientes"
                             [searchKeyword]="keyword"
                             placeHolder="Digite o nome do cliente"
-                            historyIdentifier="clientes"
+                            minQueryLength="2"
+                            (inputChanged)='getServerResponseClientes($event)' 
+                            (inputCleared)='searchClearedClientes()'
+                            [isLoading]="isLoadingResult" 
                             [itemTemplate]="itemTemplate"
                             [notFoundTemplate]="notFoundTemplate">
                         </ng-autocomplete>
@@ -25,9 +28,7 @@
                           <a [innerHTML]="item.nome"></a>
                         </ng-template>
                       
-                        <ng-template #notFoundTemplate let-notFound>
-                          <div [innerHTML]="notFound"></div>
-                        </ng-template>
+                        <ng-template #notFoundTemplate let-notFound><div style="color:black;padding:10px;">Cliente não encontrado.</div></ng-template>
                       </div>                      
                   </div>
                   <div class="col-4 CustomCol">
@@ -124,6 +125,11 @@
           </mat-form-field>
           
           <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+              <td mat-cell *matCellDef="let row">{{row.id}}</td>
+            </ng-container>
+
             <ng-container matColumnDef="data">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
               <td mat-cell *matCellDef="let row">
