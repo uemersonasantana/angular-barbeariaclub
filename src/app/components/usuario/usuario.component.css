@@ -1,3 +1,9 @@
+.card {
+    background-color: white;
+}
+.mat-input-element {
+    color:black;
+}
 table {
     width: 100%;
 }

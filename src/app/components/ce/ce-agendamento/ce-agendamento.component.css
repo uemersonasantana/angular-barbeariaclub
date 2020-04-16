@@ -1,3 +1,6 @@
 .ng-autocomplete {
     width: 100%;
 }
+.close {
+    color: black;
+}

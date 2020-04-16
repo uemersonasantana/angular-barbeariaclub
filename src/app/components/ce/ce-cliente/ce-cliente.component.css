@@ -1,3 +1,7 @@
+.close {
+    color: black;
+}
+
 .tap-small-box, .tap-large-box {
     display: flex;
     align-items: center;
