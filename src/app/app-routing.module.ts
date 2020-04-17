@@ -13,6 +13,7 @@ import {UsuarioComponent} from './components/usuario/usuario.component';
 
 const appRoutes: Routes = [
   {path: '', canActivate:[BeforeLoginService], children: [
+    { path : '', component: LoginComponent },
     { path : 'login', component: LoginComponent },
     { path : 'signup', component : SignupComponent},
     { path : 'request-password-reset', component: RequestResetComponent },

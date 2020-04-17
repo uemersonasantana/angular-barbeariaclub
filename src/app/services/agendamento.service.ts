@@ -38,7 +38,7 @@ export class AgendamentoService {
       tempo:6
     }
 
-    this._http.post(API_URL + '/agendamentos/find/', tempForm).subscribe(
+    this._http.post(API_URL + '/agendamentos/find', tempForm).subscribe(
       (data: any[]) => {
         for(let d of data) {
           //console.log(d.cliente.sobrenome.length)
@@ -90,7 +90,7 @@ export class AgendamentoService {
     */
 
   getAgendamentos(params?:any): Observable<Agendamento[]> {
-    return this._http.post(API_URL + '/agendamentos/find/', params)
+    return this._http.post(API_URL + '/agendamentos/find', params)
     .pipe(
       map((response: any) => {
         return response; 
