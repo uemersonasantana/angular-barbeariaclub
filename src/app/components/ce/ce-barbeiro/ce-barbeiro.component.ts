@@ -36,7 +36,7 @@ export class CeBarbeiroComponent implements OnInit {
         let formID = {
           id:data.id
         }
-        this._http.post(API_URL + '/barbeiro/edit/', formID).subscribe(
+        this._http.post(API_URL + '/barbeiro/edit', formID).subscribe(
           (barbeiro: Barbeiro[]) => {
             this.barbeiro = barbeiro
           }

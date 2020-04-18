@@ -41,7 +41,7 @@ export class CeUsuarioComponent implements OnInit {
         let formID = {
           id:data.id
         }
-        this._http.post(API_URL + '/usuario/edit/', formID).subscribe(
+        this._http.post(API_URL + '/usuario/edit', formID).subscribe(
           (usuario: Usuario[]) => {
             this.usuario = usuario
           }

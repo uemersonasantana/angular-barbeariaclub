@@ -65,7 +65,7 @@ export class CeClienteComponent implements OnInit {
           id:data.id
         }
         
-        this._http.post(API_URL + '/cliente/edit/', formID).subscribe(
+        this._http.post(API_URL + '/cliente/edit', formID).subscribe(
           (cliente: Cliente[]) => {
             this.cliente  = cliente
             

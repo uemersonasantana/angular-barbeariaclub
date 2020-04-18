@@ -93,7 +93,7 @@ export class CeAgendamentoComponent implements OnInit {
         let formID = {
           id:data.id
         }
-        this._http.post(API_URL + '/agendamentos/find/', formID).subscribe(
+        this._http.post(API_URL + '/agendamentos/find', formID).subscribe(
           (agendamento: any[]) => {
             this.agendamento = [];
             for(let p of agendamento) {
