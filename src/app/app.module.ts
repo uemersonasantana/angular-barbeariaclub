@@ -54,9 +54,6 @@ import { CeUsuarioComponent } from './components/ce/ce-usuario/ce-usuario.compon
 //import {OverlayModule} from '@angular/cdk/overlay';
 
 
-//registerLocaleData(localePt);
-
-
 @NgModule({
   declarations: [
     AppComponent,

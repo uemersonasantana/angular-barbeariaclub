@@ -39,3 +39,7 @@ table {
 .custom-day.faded {
     background-color: rgba(2, 117, 216, 0.5);
 }
+.antigo {
+    background-color: red; 
+    color:white;
+}

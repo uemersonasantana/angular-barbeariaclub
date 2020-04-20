@@ -153,8 +153,8 @@ export class AgendamentoComponent {
       dataFinal: null
   };
 
-  CurrentDate = new Date().toJSON().slice(0,19).replace(/-/g,'-').replace(/T/g,' ');
-
+  CurrentDate = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})
+  
   displayedColumns: string[] = ['id', 'data', 'hora', 'servico', 'cliente', 'barbearia', 'actions'];
   dataSource: MatTableDataSource<Agendamento>;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
