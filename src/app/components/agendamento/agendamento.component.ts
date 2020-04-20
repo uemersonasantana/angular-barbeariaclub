@@ -185,7 +185,7 @@ export class AgendamentoComponent {
           // Assign the data to the data source for the table to render
           this.dataSource =  new MatTableDataSource(this.agendamentos)
           this.dataSource.paginator = this.paginator;
-          this.sort.sort(({ id: 'id', start: 'desc'}) as MatSortable)
+          this.sort.sort(({ id: 'dataagendamento', start: 'desc'}) as MatSortable)
           this.dataSource.sort = this.sort;
         }, 
         error => this.isLoading = false

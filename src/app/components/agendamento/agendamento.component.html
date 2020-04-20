@@ -139,7 +139,7 @@
           
             <ng-container matColumnDef="hora">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Hora</th>
-              <td mat-cell *matCellDef="let row">{{ row.dataagendamento | date: 'h:mm' }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.dataagendamento | date: 'HH:mm' }}</td>
             </ng-container>
     
             <ng-container matColumnDef="servico">
