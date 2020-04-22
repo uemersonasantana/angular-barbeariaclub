@@ -41,31 +41,32 @@ export class AgendamentoService {
     this._http.post(API_URL + '/agendamentos/find', tempForm).subscribe(
       (data: any[]) => {
         for(let d of data) {
-          //console.log(d.cliente.sobrenome.length)
-          let sobrenome:string = ''
-          let Fone2:string = ''
+          if (d.cliente.nome) {
+            let sobrenome:string = ''
+            let Fone2:string = ''
 
-          if ( d.cliente.sobrenome ) {
-            sobrenome = d.cliente.sobrenome.substr(0,6)
-            if ( d.cliente.sobrenome.length > 6 ) {
-              sobrenome += '...'
-            } 
-          } else {
-            sobrenome = ''
-          }
+            if ( d.cliente.sobrenome ) {
+              sobrenome = d.cliente.sobrenome.substr(0,6)
+              if ( d.cliente.sobrenome.length > 6 ) {
+                sobrenome += '...'
+              } 
+            } else {
+              sobrenome = ''
+            }
 
-          if (Fone2) {
-            Fone2 = ' | '+'Fone 2: '+d.cliente.fone2
+            if (Fone2) {
+              Fone2 = ' | '+'Fone 2: '+d.cliente.fone2
+            }
+            
+            this.Notfiy.confirm('Fone 1: '+d.cliente.fone1 + Fone2, d.cliente.nome + ' ' + sobrenome, {
+              showProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              buttons: [
+                {text: 'Fechar', action: (toast) => {this.Notfiy.remove(toast.id); }, bold: false},
+              ]
+            });
           }
-          
-          this.Notfiy.confirm('Fone 1: '+d.cliente.fone1 + Fone2, d.cliente.nome + ' ' + sobrenome, {
-            showProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            buttons: [
-              {text: 'Fechar', action: (toast) => {this.Notfiy.remove(toast.id); }, bold: false},
-            ]
-          });
         }
       }
     )
